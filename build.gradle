@@ -1,0 +1,61 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.7' apply false
+    id 'io.franzbecker.gradle-lombok' version '2.0'
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.12'
+}
+
+allprojects {
+    apply plugin: 'io.franzbecker.gradle-lombok'
+
+    lombok {
+        version = '1.18.4'
+        sha256 = ""
+    }
+
+    version '0.1'
+    sourceCompatibility = 1.11
+
+    group 'tanks'
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+project(":client") {
+    apply plugin: 'application'
+    apply plugin: 'org.openjfx.javafxplugin'
+
+    javafx {
+        modules = [ 'javafx.controls', 'javafx.fxml' ]
+    }
+
+    group 'tanks.client'
+    mainClassName = 'tanks.client.Main'
+
+    jar {
+        manifest {
+            attributes 'Main-Class': 'tanks.client.Main'
+        }
+    }
+}
+
+project(":server") {
+    group 'tanks.server'
+    mainClassName = 'tanks.server.Main'
+
+    jar {
+        manifest {
+            attributes 'Main-Class': 'tanks.server.Main'
+        }
+    }
+}
+
+
+
+
