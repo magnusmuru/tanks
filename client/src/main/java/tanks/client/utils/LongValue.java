@@ -1,9 +1,17 @@
 package tanks.client.utils;
 
-public class LongValue {
-    public long value;
+import lombok.Getter;
+import lombok.Setter;
 
-    public LongValue(long i) {
-        value = i;
+public class LongValue {
+    @Getter @Setter private long value;
+
+    /**
+     * A helper class to store time in Main.AnimationTimer.handle()
+     *
+     * @param newValue
+     */
+    public LongValue(long newValue) {
+        value = newValue;
     }
 }

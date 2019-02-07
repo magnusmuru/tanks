@@ -20,19 +20,27 @@ public class TankBase {
 
     protected ImageView turretSprite;
 
+    /**
+     * Since turret has the same sprite are for both local and remote tank, we'll set that here
+     */
     public TankBase() {
          this.turretSprite = new ImageView(new Image("/gui/sprites/TankLocal.png"));
     }
 
+    /**
+     * Updates tank's coordinates on the playing field.
+     *
+     * @param time Milliseconds from last frame.
+     */
     public void update(double time) {
         this.positionX += velocityX * time;
         this.positionY += velocityY * time;
     }
 
-    public void setPosition(double posX, double posY) {
-        this.positionX = posX;
-        this.positionY = posY;
-    }
+    /**
+     * Render tank on screen.
+     */
+    public void render() {}
 
     protected void setHullImage(String url) {
         this.hullImage = new Image(url);
