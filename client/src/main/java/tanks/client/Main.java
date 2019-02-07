@@ -6,7 +6,6 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import tanks.client.models.TankLocal;
-import tanks.client.utils.LongValue;
 
 public class Main extends Application {
     private static int windowWidth = 800;
@@ -29,16 +28,16 @@ public class Main extends Application {
             tankLocal.setMousePosition(event.getSceneX(), event.getSceneY());
         });
 
-        final LongValue lastTime = new LongValue(System.currentTimeMillis());
-
         AnimationTimer animationTimer = new AnimationTimer() {
+            long lastTime = System.currentTimeMillis();
+
             @Override
             public void handle(long now) {
-                tankLocal.update(now - lastTime.getValue());
+                tankLocal.update(now - lastTime);
 
                 tankLocal.render();
 
-                lastTime.setValue(now);
+                lastTime = now;
             }
         };
         animationTimer.start();
