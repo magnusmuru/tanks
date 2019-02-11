@@ -19,4 +19,4 @@ Deadline | What will be done
 JavaFX for the gui part and Gradle for dependancy management.
 
 ### Points
-Stupid question... 75 of course!  
+Stupid question... 75 of course!
