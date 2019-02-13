@@ -33,8 +33,6 @@ public class TankBase {
      * @param time Milliseconds from last frame.
      */
     public void update(double time) {
-        this.positionX += velocityX * time;
-        this.positionY += velocityY * time;
     }
 
     /**
