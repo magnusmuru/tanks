@@ -17,7 +17,6 @@ allprojects {
         sha256 = ""
     }
 
-    version '0.1'
     sourceCompatibility = 1.11
 
     group 'tanks'
@@ -47,11 +46,11 @@ project(":client") {
 
 project(":server") {
     group 'tanks.server'
-    mainClassName = 'tanks.server.Main'
+    mainClassName = 'tanks.server.ServerMain'
 
     jar {
         manifest {
-            attributes 'Main-Class': 'tanks.server.Main'
+            attributes 'Main-Class': 'tanks.server.ServerMain'
         }
     }
 }
