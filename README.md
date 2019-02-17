@@ -39,4 +39,4 @@ Tähtaeg | Mis tehtud saab
 ------------- | -------------|
 18.02.2019 | Crude playability: Finished controls, mouse tracking and shooting mechanics. **FRAMERATE CAP**
 04.03.2019 | Basic networking: Server has basic functionality. Crude packet protocol is in place and clients can communicate with server.
-18.03.2019 | Beautiful: Eyecandy aprites and animations, pretty playing fields.
+18.03.2019 | Beautiful: Eyecandy aprites and animations, pretty playing fields.K
