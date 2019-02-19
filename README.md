@@ -21,7 +21,7 @@ Peamine eesmärk õppida võrgundust. Mäng kasutab _dedicated server_ it, et pi
 Kliendi aken JavaFX-iga. Dependency management Gradleis ja suhtlus serveriga Socketitega.
 
 ### Punktid
-Funktsionaalsuse eest alla 75p ei lepi, haldus kindlasti 55 kuni 75.
+Funktsionaalsuse eest alla 75p ei lepi.
 
 ### Vaated
 ##### Esileht
