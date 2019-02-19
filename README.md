@@ -1,7 +1,7 @@
 # Tanks
 Lihtne 2D ülaltvaates võrgus elav tankimäng. Eesmärk teise mängija tanki elud nulli viia. 
 
-![Pilt](https://gitlab.cs.ttu.ee/kapala/iti0202-2019-gui/blob/931abc4f1d62421a21a38c4631f1572e33d21648/images/2019-02-18_23-17.png)
+![Pilt](https://gitlab.cs.ttu.ee/kapala/iti0202-2019-gui/raw/931abc4f1d62421a21a38c4631f1572e33d21648/images/2019-02-18_23-17.png)
 
 
 ### Liikmed
