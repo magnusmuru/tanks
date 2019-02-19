@@ -1,6 +1,9 @@
 # Tanks
 Lihtne 2D ülaltvaates võrgus elav tankimäng. Eesmärk teise mängija tanki elud nulli viia. 
 
+![Pilt](https://gitlab.cs.ttu.ee/kapala/iti0202-2019-gui/blob/master/images/2019-02-18_23-17.png)
+
+
 ### Liikmed
 - Kaur Palang (kapala)
 - Magnus Muru (magmur)
