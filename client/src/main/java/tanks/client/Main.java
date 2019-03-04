@@ -7,7 +7,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import tanks.client.models.TankBase;
 import tanks.client.models.TankLocal;
+import tanks.client.networking.Connection;
+import tanks.client.networking.TankManager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,26 +28,34 @@ public class Main extends Application {
     private static int windowWidth = 800;
     private static int windowHeight = 600;
 
+    private static Connection connection;
+    public static TankManager tankManager;
+
+    public static Group root;
+    public static Scene scene;
+
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) {
+        connection = new Connection("network");
+        tankManager = new TankManager();
+        root = new Group();
+
+        scene = new Scene(root, windowWidth, windowHeight);
+
         primaryStage.setTitle( "The Game" );
+        primaryStage.setMaxHeight(windowHeight);
+        primaryStage.setMinHeight(windowHeight);
+        primaryStage.setMaxWidth(windowWidth);
+        primaryStage.setMinWidth(windowWidth);
+        primaryStage.setResizable(false);
 
-        Group root = new Group();
-        Scene scene = new Scene(root, windowWidth, windowHeight);
+        connection.start();
 
-        TankLocal tankLocal = new TankLocal();
         Text frameRate = new Text(10, 50, "This is a test");
-
-        Text mouse = new Text(10, 100, "This is a test");
-
-
-        scene.setOnMouseMoved(event -> {
-            tankLocal.setMousePosition(event.getSceneX(), event.getSceneY());
-        });
 
         AnimationTimer animationTimer = new AnimationTimer() {
             long lastTime;
@@ -61,20 +72,16 @@ public class Main extends Application {
                 double deltaMillis = deltaNanos / 1000000;
 
                 frameRate.setText(String.format("%1$.2f", 1000 / deltaMillis) + " fps");
-                mouse.setText(tankLocal.getMouseX() + "x" + tankLocal.getMouseY());
 
-
-                tankLocal.render();
+                for (TankBase tank : tankManager.getTanks())
+                    tank.render();
 
                 lastTime = now;
             }
         };
         animationTimer.start();
 
-        root.getChildren().add(tankLocal.getHullView());
         root.getChildren().add(frameRate);
-        root.getChildren().add(mouse);
-
 
         primaryStage.setScene(scene);
         primaryStage.show();

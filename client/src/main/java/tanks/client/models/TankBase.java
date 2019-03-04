@@ -7,10 +7,10 @@ import lombok.Setter;
 
 
 public class TankBase {
-    @Getter protected double positionX;
-    @Getter protected double positionY;
-    @Getter @Setter protected double velocityX;
-    @Getter @Setter protected double velocityY;
+    @Getter @Setter public String id;
+
+    @Getter @Setter protected int positionX;
+    @Getter @Setter protected int positionY;
 
     @Getter @Setter protected double hullRotation;
     @Getter @Setter protected double turretRotation;
@@ -21,7 +21,7 @@ public class TankBase {
     protected ImageView turretSprite;
 
     /**
-     * Since turret has the same sprite are for both local and remote tank, we'll set that here
+     * Since turret has the same sprite for both local and remote tank, we'll set that here
      */
     public TankBase() {
          this.turretSprite = new ImageView(new Image("/gui/sprites/TankLocal.png"));
@@ -32,8 +32,7 @@ public class TankBase {
      *
      * @param time Milliseconds from last frame.
      */
-    public void update(double time) {
-    }
+    //public abstract void update(double time);
 
     /**
      * Render tank on screen.

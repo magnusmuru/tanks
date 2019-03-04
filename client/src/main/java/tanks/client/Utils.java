@@ -1,6 +1,10 @@
 package tanks.client;
 
+import tanks.client.networking.Packet;
+
 import java.text.DecimalFormat;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Utils {
     public static String formatDoubleToDecimals(double input, int decimalCount) {
@@ -18,4 +22,11 @@ public class Utils {
         df.applyPattern(pattern);
         return df.format(input);
     }
+
+    public static String getPatternGroupOrNull(String msg, String pattern, int group) {
+        Pattern r = Pattern.compile(pattern);
+        return r.matcher(msg).group(group);
+    }
+
+
 }
