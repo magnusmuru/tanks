@@ -18,6 +18,10 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Title {
+    public Button play_button;
+    public Button customize_button;
+    public Button help_button;
+
 
     public Stage showTitle(Stage theStage) {
 
@@ -72,6 +76,10 @@ public class Title {
         root.getChildren().addAll(flashScreen_node, buttonContainer); //add the title screen and button container to the stackpane
         Scene theScene = new Scene(root, CANVAS_WIDTH, CANVAS_HEIGHT, Color.BLACK);
         theStage.setScene(theScene);
+        this.play_button = play_button;
+        this.customize_button = customize_button;
+        this.help_button = help_button;
+
         return theStage;
     }
 }

@@ -54,61 +54,9 @@ public class Main extends Application {
         root = new Group();
 
         scene = new Scene(root, windowWidth, windowHeight);
-        double CANVAS_WIDTH = 800;
-        final double CANVAS_HEIGHT = 450;
-        primaryStage.setResizable(false);
-
-        final Image titleScreen = new Image("/gui/menus/Title.png"); //title screen image
-        final Image playButton = new Image("/gui/menus/PlayTransparent.png"); //the play button image
-        final Image customizeButton = new Image("/gui/menus/Customize.png");
-        final Image helpButton = new Image("/gui/menus/Help.png");
-
-        final ImageView flashScreen_node = new ImageView();
-        flashScreen_node.setImage(titleScreen); //set the image of the title screen
-
-        final Button play_button = new Button();
-        final ImageView play_button_node = new ImageView();
-        final Button customize_button = new Button();
-        final ImageView customize_button_node = new ImageView();
-        final Button help_button = new Button();
-        final ImageView help_button_node = new ImageView();
-
-
-        play_button_node.setImage(playButton); //set the image of the play button
-        customize_button_node.setImage(customizeButton);
-        help_button_node.setImage(helpButton);
-
-        play_button.setGraphic(play_button_node);
-        play_button.setBackground(new Background(new BackgroundImage(new Image("/gui/menus/PlayBackgroundLong.png"),
-                null, null, null, null)));
-        customize_button.setGraphic(customize_button_node);
-        customize_button.setBackground(new Background(new BackgroundImage(new Image("/gui/menus/PlayBackgroundLong.png"),
-                null, null, null, null)));
-        help_button.setGraphic(help_button_node);
-        help_button.setBackground(new Background(new BackgroundImage(new Image("/gui/menus/PlayBackgroundLong.png"),
-                null, null, null, null)));
-
-        /*
-         * create the container of those buttons
-         */
-        final VBox buttonContainer = new VBox(5);
-        buttonContainer.setAlignment(Pos.TOP_CENTER);
-        Insets buttonContainerPadding = new Insets(250, 1, 1, 1);
-        buttonContainer.setPadding(buttonContainerPadding);
-        buttonContainer.getChildren().addAll(play_button, customize_button, help_button);
-
-        primaryStage.setTitle("Jago Tanks!");
-        primaryStage.getIcons().add(titleScreen); //stage icon
-
-
-        StackPane root = new StackPane();
-
-        root.getChildren().addAll(flashScreen_node, buttonContainer); //add the title screen and button container to the stackpane
-        Scene theScene = new Scene(root, CANVAS_WIDTH, CANVAS_HEIGHT, Color.BLACK);
-        primaryStage.setScene(theScene);
-        primaryStage.show();
-
-        play_button.setOnAction(e -> {
+        Title title = new Title();
+        title.showTitle(primaryStage).show();
+        title.play_button.setOnAction(e -> {
             connection = new Connection("network");
             tankManager = new TankManager();
             primaryStage.setTitle("The Game");
