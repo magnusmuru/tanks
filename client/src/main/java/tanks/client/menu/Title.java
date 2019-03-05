@@ -1,6 +1,5 @@
 package tanks.client.menu;
 
-import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -8,10 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -30,9 +26,9 @@ public class Title {
         theStage.setResizable(false);
 
         final Image titleScreen = new Image("/gui/menus/Title.png"); //title screen image
-        final Image playButton = new Image("/gui/menus/PlayTransparent.png"); //the play button image
-        final Image customizeButton = new Image("/gui/menus/Customize.png");
-        final Image helpButton = new Image("/gui/menus/Help.png");
+        final Image playButton = new Image("/gui/menus/icons/PlayTransparent.png"); //the play button image
+        final Image customizeButton = new Image("/gui/menus/icons/Customize.png");
+        final Image helpButton = new Image("/gui/menus/icons/Help.png");
 
         final ImageView flashScreen_node = new ImageView();
         flashScreen_node.setImage(titleScreen); //set the image of the title screen
@@ -50,13 +46,13 @@ public class Title {
         help_button_node.setImage(helpButton);
 
         play_button.setGraphic(play_button_node);
-        play_button.setBackground(new Background(new BackgroundImage(new Image("/gui/menus/PlayBackgroundLong.png"),
+        play_button.setBackground(new Background(new BackgroundImage(new Image("/gui/menus/icons/PlayBackgroundLong.png"),
                 null, null, null, null)));
         customize_button.setGraphic(customize_button_node);
-        customize_button.setBackground(new Background(new BackgroundImage(new Image("/gui/menus/PlayBackgroundLong.png"),
+        customize_button.setBackground(new Background(new BackgroundImage(new Image("/gui/menus/icons/PlayBackgroundLong.png"),
                 null, null, null, null)));
         help_button.setGraphic(help_button_node);
-        help_button.setBackground(new Background(new BackgroundImage(new Image("/gui/menus/PlayBackgroundLong.png"),
+        help_button.setBackground(new Background(new BackgroundImage(new Image("/gui/menus/icons/PlayBackgroundLong.png"),
                 null, null, null, null)));
 
         /*
