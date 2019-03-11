@@ -2,15 +2,26 @@ package tanks.client;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import tanks.client.models.TankBase;
 import tanks.client.models.TankLocal;
 import tanks.client.networking.Connection;
 import tanks.client.networking.TankManager;
+import tanks.client.menu.Title;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,7 +37,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Main extends Application {
     private static int windowWidth = 800;
-    private static int windowHeight = 600;
+    private static int windowHeight = 450;
 
     private static Connection connection;
     public static TankManager tankManager;
@@ -40,50 +51,54 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        connection = new Connection("network");
-        tankManager = new TankManager();
         root = new Group();
 
         scene = new Scene(root, windowWidth, windowHeight);
+        Title title = new Title();
+        title.showTitle(primaryStage).show();
+        title.play_button.setOnAction(e -> {
+            connection = new Connection("network");
+            tankManager = new TankManager();
+            primaryStage.setTitle("The Game");
+            primaryStage.setMaxHeight(windowHeight);
+            primaryStage.setMinHeight(windowHeight);
+            primaryStage.setMaxWidth(windowWidth);
+            primaryStage.setMinWidth(windowWidth);
+            primaryStage.setResizable(false);
 
-        primaryStage.setTitle( "The Game" );
-        primaryStage.setMaxHeight(windowHeight);
-        primaryStage.setMinHeight(windowHeight);
-        primaryStage.setMaxWidth(windowWidth);
-        primaryStage.setMinWidth(windowWidth);
-        primaryStage.setResizable(false);
+            connection.start();
 
-        connection.start();
+            Text frameRate = new Text(10, 50, "This is a test");
 
-        Text frameRate = new Text(10, 50, "This is a test");
+            AnimationTimer animationTimer = new AnimationTimer() {
+                long lastTime;
 
-        AnimationTimer animationTimer = new AnimationTimer() {
-            long lastTime;
+                @Override
+                public void start() {
+                    super.start();
+                    this.lastTime = System.nanoTime();
+                }
 
-            @Override
-            public void start() {
-                super.start();
-                this.lastTime = System.nanoTime();
-            }
+                @Override
+                public void handle(long now) {
+                    double deltaNanos = now - lastTime;
+                    double deltaMillis = deltaNanos / 1000000;
 
-            @Override
-            public void handle(long now) {
-                double deltaNanos = now - lastTime;
-                double deltaMillis = deltaNanos / 1000000;
+                    frameRate.setText(String.format("%1$.2f", 1000 / deltaMillis) + " fps");
 
-                frameRate.setText(String.format("%1$.2f", 1000 / deltaMillis) + " fps");
+                    for (TankBase tank : tankManager.getTanks())
+                        tank.render();
 
-                for (TankBase tank : tankManager.getTanks())
-                    tank.render();
+                    lastTime = now;
+                }
+            };
+            animationTimer.start();
 
-                lastTime = now;
-            }
-        };
-        animationTimer.start();
+            root.getChildren().add(frameRate);
 
-        root.getChildren().add(frameRate);
+            primaryStage.setScene(scene);
+            primaryStage.show();
 
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        });
     }
 }
