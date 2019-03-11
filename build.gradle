@@ -36,23 +36,11 @@ project(":client") {
 
     group 'tanks.client'
     mainClassName = 'tanks.client.Main'
-
-    jar {
-        manifest {
-            attributes 'Main-Class': 'tanks.client.Main'
-        }
-    }
 }
 
 project(":server") {
     group 'tanks.server'
     mainClassName = 'tanks.server.ServerMain'
-
-    jar {
-        manifest {
-            attributes 'Main-Class': 'tanks.server.ServerMain'
-        }
-    }
 }
 
 

@@ -3,10 +3,10 @@ package tanks.client.models;
 import lombok.Getter;
 
 public class TankLocal extends TankBase {
-    boolean isRightPressed, isLeftPressed, isUpPressed, isDownPressed;
+    @Getter boolean isRightPressed, isLeftPressed, isUpPressed, isDownPressed;
     double hullRotationFactor = 0.5;
     double speedFactor = 0.5;
-    @Getter double mouseX, mouseY;
+    @Getter int mouseX, mouseY;
 
     /**
      * Initiate local tank. Set hull spite, get focus and add keyboard input listeners.
@@ -59,8 +59,8 @@ public class TankLocal extends TankBase {
      * @param mouseY
      */
     public void setMousePosition(double mouseX, double mouseY) {
-        this.mouseX = mouseX;
-        this.mouseY = mouseY;
+        this.mouseX = (int) mouseX;
+        this.mouseY = (int) mouseY;
     }
 
     /**
