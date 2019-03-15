@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import tanks.client.menu.Customize;
 import tanks.client.models.TankBase;
 import tanks.client.models.TankLocal;
 import tanks.client.networking.Connection;
@@ -55,7 +56,12 @@ public class Main extends Application {
 
         scene = new Scene(root, windowWidth, windowHeight);
         Title title = new Title();
+        Customize customizeMenu = new Customize();
         title.showTitle(primaryStage).show();
+        title.customize_button.setOnAction(e -> {
+            customizeMenu.showTitle(primaryStage).show();
+        });
+
         title.play_button.setOnAction(e -> {
             connection = new Connection("network");
             tankManager = new TankManager();
