@@ -23,7 +23,7 @@ public class Customize {
         final double CANVAS_HEIGHT = 450;
         theStage.setResizable(false);
 
-        final Image titleScreen = new Image("/gui/menus/Title.png"); //title screen image
+        final Image titleScreen = new Image("/gui/menus/CustomizeBackground.png"); //title screen image
         final Image backButton = new Image("/gui/menus/icons/Back.png"); //the play button image
 
         final ImageView flashScreen_node = new ImageView();
@@ -47,7 +47,6 @@ public class Customize {
         buttonContainer.setPadding(buttonContainerPadding);
         buttonContainer.getChildren().addAll(back_button);
 
-        theStage.setTitle("Jago Tanks!");
         theStage.getIcons().add(titleScreen); //stage icon
 
         StackPane root = new StackPane();
