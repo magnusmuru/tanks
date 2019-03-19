@@ -13,9 +13,9 @@ public class Packet {
     private String command;
     private String payload;
 
-    public static Packet parseMsgToPacket(String serverMessage) {
-        final String commandPattern = "^((?:\\w+-\\w+)|(?:\\w+)(?: ))(.+)$";
+    private static String commandPattern = "^((?:\\w+-\\w+)|(?:\\w+)(?: ))(.+)$";
 
+    public static Packet parseMsgToPacket(String serverMessage) {
         Pattern pattern = Pattern.compile(commandPattern);
 
         Matcher matcher = pattern.matcher(serverMessage);

@@ -1,34 +1,46 @@
 package tanks.server;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import tanks.server.persistence.Tank;
+import tanks.server.persistence.TankManager;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class ServerMain extends Thread {
     private ServerSocket serverSocket;
+    private TankManager tankManager;
+
+    private List<SingleConnection> singleConnections;
+
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     public ServerMain(int port) throws IOException {
         serverSocket = new ServerSocket(port);
-        serverSocket.setSoTimeout(10000);
+        //serverSocket.setSoTimeout(10000);
+
+        singleConnections = new ArrayList<>();
+        scheduler.scheduleAtFixedRate(this::serverTick, 0, 2, TimeUnit.SECONDS);
     }
 
     public void run() {
         while(true) {
+            tankManager = new TankManager();
+
             try {
                 System.out.println("Waiting for client on port " + serverSocket.getLocalPort() + "...");
-                Socket server = serverSocket.accept();
+                Socket client = serverSocket.accept();
 
-                System.out.println("Just connected to " + server.getRemoteSocketAddress());
-                DataInputStream in = new DataInputStream(server.getInputStream());
+                SingleConnection singleConnection = new SingleConnection(tankManager, client);
+                boolean hsSuccess = singleConnection.tryHandShake();
 
-                System.out.println(in.readUTF());
-                DataOutputStream out = new DataOutputStream(server.getOutputStream());
-                out.writeUTF("Thank you for connecting to " + server.getLocalSocketAddress()
-                        + "\nGoodbye!");
-                server.close();
+                if (hsSuccess) singleConnections.add(singleConnection);
 
             } catch (SocketTimeoutException s) {
                 System.out.println("Socket timed out!");
@@ -37,6 +49,16 @@ public class ServerMain extends Thread {
                 e.printStackTrace();
                 break;
             }
+        }
+    }
+
+    private void serverTick() {
+        for (SingleConnection singleConnection : singleConnections) {
+            singleConnection.doTick();
+        }
+
+        for (SingleConnection singleConnection : singleConnections) {
+            singleConnection.sendUpdate();
         }
     }
 

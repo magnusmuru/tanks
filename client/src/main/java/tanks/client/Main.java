@@ -36,6 +36,8 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 public class Main extends Application {
+    private static Main instance;
+
     private static int windowWidth = 800;
     private static int windowHeight = 450;
 
@@ -51,21 +53,21 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        instance = this;
         root = new Group();
 
         scene = new Scene(root, windowWidth, windowHeight);
         Title title = new Title();
         title.showTitle(primaryStage).show();
+
+        primaryStage.setTitle("The Game");
+        primaryStage.setWidth(windowWidth);
+        primaryStage.setHeight(windowHeight);
+
+        tankManager = new TankManager();
+
         title.play_button.setOnAction(e -> {
             connection = new Connection("network");
-            tankManager = new TankManager();
-            primaryStage.setTitle("The Game");
-            primaryStage.setMaxHeight(windowHeight);
-            primaryStage.setMinHeight(windowHeight);
-            primaryStage.setMaxWidth(windowWidth);
-            primaryStage.setMinWidth(windowWidth);
-            primaryStage.setResizable(false);
-
             connection.start();
 
             Text frameRate = new Text(10, 50, "This is a test");
@@ -86,8 +88,12 @@ public class Main extends Application {
 
                     frameRate.setText(String.format("%1$.2f", 1000 / deltaMillis) + " fps");
 
-                    for (TankBase tank : tankManager.getTanks())
+                    for (TankBase tank : tankManager.getTanks()) {
+                        if (!root.getChildren().contains(tank.getHullView()))
+                            root.getChildren().add(tank.getHullView());
+
                         tank.render();
+                    }
 
                     lastTime = now;
                 }
@@ -100,5 +106,9 @@ public class Main extends Application {
             primaryStage.show();
 
         });
+    }
+
+    public static Main getInstance() {
+        return instance;
     }
 }

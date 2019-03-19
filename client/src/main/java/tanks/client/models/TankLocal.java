@@ -4,8 +4,6 @@ import lombok.Getter;
 
 public class TankLocal extends TankBase {
     @Getter boolean isRightPressed, isLeftPressed, isUpPressed, isDownPressed;
-    double hullRotationFactor = 0.5;
-    double speedFactor = 0.5;
     @Getter int mouseX, mouseY;
 
     /**
