@@ -76,6 +76,11 @@ public class Title {
         this.customize_button = customize_button;
         this.help_button = help_button;
 
+        customize_button.setOnAction(e -> {
+            Customize customizeMenu = new Customize();
+            customizeMenu.showTitle(theStage, this).show();
+        });
+
         return theStage;
     }
 }

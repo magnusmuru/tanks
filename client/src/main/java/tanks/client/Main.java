@@ -58,9 +58,6 @@ public class Main extends Application {
         Title title = new Title();
         Customize customizeMenu = new Customize();
         title.showTitle(primaryStage).show();
-        title.customize_button.setOnAction(e -> {
-            customizeMenu.showTitle(primaryStage).show();
-        });
 
         title.play_button.setOnAction(e -> {
             connection = new Connection("network");
