@@ -9,11 +9,14 @@ import tanks.client.models.TankLocal;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.ScheduledExecutorService;
 
 public class TankManager {
 
     @Getter private Set<TankBase> tanks;
     @Getter private TankLocal tankLocal;
+
+    private ScheduledExecutorService scheduler;
 
     public TankManager() {
         this.tanks = new HashSet<>();
@@ -21,7 +24,6 @@ public class TankManager {
 
     public void addTank(TankBase tank) {
         this.tanks.add(tank);
-        Main.root.getChildren().add(tank.getHullView());
     }
 
     public void addLocalTank(String id) {
@@ -29,7 +31,6 @@ public class TankManager {
         tankLocal.id = id;
 
         Main.scene.setOnMouseMoved(event -> tankLocal.setMousePosition(event.getSceneX(), event.getSceneY()));
-
 
         this.tankLocal = tankLocal;
         addTank(tankLocal);
@@ -56,7 +57,6 @@ public class TankManager {
         String[] values = dataString.split(" ");
 
         String id = values[0];
-
         TankLocal tankBase = (TankLocal) getTankById(id);
 
         if (tankBase == null) {
@@ -83,28 +83,24 @@ public class TankManager {
      * Returnable dataString looks like this:
      * [ID] [x] [y] [mouseX] [mouseY] [isUpPressed] [isDownPressed] [isLeftPressed] [isRightPressed]
      *
-     * @param id
      * @return
      */
-    public String getTankData(String id) {
-        TankLocal tankBase = (TankLocal) getTankById(id);
+    public String getTankData() {
+        if (tankLocal == null) return "";
 
-        if (tankBase == null) return "Not found";
+        int posX = tankLocal.getPositionX();
+        int posY = tankLocal.getPositionY();
 
-        int posX = tankBase.getPositionX();
-        int posY = tankBase.getPositionY();
+        int mouseX = tankLocal.getMouseX();
+        int mouseY = tankLocal.getMouseY();
 
-        int mouseX = tankBase.getMouseX();
-        int mouseY = tankBase.getMouseY();
-
-        boolean isUpPressed = tankBase.isUpPressed();
-        boolean isDownPressed = tankBase.isDownPressed();
-        boolean isLeftPressed = tankBase.isLeftPressed();
-        boolean isRightPressed = tankBase.isRightPressed();
-
+        boolean isUpPressed = tankLocal.isUpPressed();
+        boolean isDownPressed = tankLocal.isDownPressed();
+        boolean isLeftPressed = tankLocal.isLeftPressed();
+        boolean isRightPressed = tankLocal.isRightPressed();
 
         return String.format("%s %s %s %s %s %s %s %s %s",
-                id,posX, posY, mouseX, mouseY,
+                tankLocal.id, posX, posY, mouseX, mouseY,
                 isUpPressed, isDownPressed, isLeftPressed, isRightPressed);
     }
 }
