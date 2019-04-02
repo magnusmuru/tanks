@@ -3,18 +3,21 @@ package tanks.server.persistence;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Arrays;
+import java.util.Objects;
 
 
 public class Tank {
+    private static final int WIDTH = 800;
+    private static final int HEIGHT = 400;
+
     @Getter public int id;
 
     @Getter @Setter protected int positionX, positionY, mouseX, mouseY;
     @Getter @Setter protected double hullRotation, turretRotation;
     @Getter boolean isRightPressed, isLeftPressed, isUpPressed, isDownPressed;
 
-    final double hullRotationFactor = 0.5;
-    final double speedFactor = 0.5;
+    final double hullRotationFactor = 5;
+    final double speedFactor = 4;
 
     public Tank(int id) {
         this.id = id;
@@ -45,14 +48,11 @@ public class Tank {
     }
 
     public void calculateTank() {
-        System.out.println(isUpPressed);
-        if (isUpPressed) {
-            positionX += 10; //speedFactor * Math.cos(Math.toRadians(hullRotation));
-            positionY += 10; //speedFactor * Math.cos(Math.toRadians(hullRotation));
-        } else if (isDownPressed) {
-            positionX -= speedFactor * Math.cos(Math.toRadians(hullRotation));
-            positionY -= speedFactor * Math.cos(Math.toRadians(hullRotation));
-        }
+        if (positionY < 0) positionY = 0;
+        else if (HEIGHT < positionY) positionY = HEIGHT - 50;
+
+        if (positionX < 0) positionX = 0;
+        else if (WIDTH < positionX) positionX = WIDTH;
 
         if (isLeftPressed) {
             hullRotation += hullRotationFactor;
@@ -61,7 +61,14 @@ public class Tank {
             hullRotation -= hullRotationFactor;
             if (hullRotation < 0) hullRotation += 360;
         }
-        System.out.println("Calc: " + positionX + "|" + positionY);
+
+        if (isUpPressed) {
+            positionX += speedFactor * Math.cos(Math.toRadians(hullRotation));
+            positionY += speedFactor * Math.sin(Math.toRadians(hullRotation));
+        } else if (isDownPressed) {
+            positionX -= speedFactor * Math.cos(Math.toRadians(hullRotation));
+            positionY -= speedFactor * Math.sin(Math.toRadians(hullRotation));
+        }
     }
 
     /**
@@ -72,5 +79,23 @@ public class Tank {
     public String getTankInfo() {
         return String.format("%s %s %s %s %s %s",
                 id, positionX, positionY, hullRotation, turretRotation, 0);
+    }
+
+    @Override
+    public String toString() {
+        return getTankInfo();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tank tank = (Tank) o;
+        return id == tank.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

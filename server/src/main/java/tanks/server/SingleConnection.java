@@ -5,10 +5,11 @@ import tanks.server.persistence.TankManager;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.net.SocketException;
+import java.util.List;
 
 public class SingleConnection {
     private Socket clientSocket;
@@ -22,9 +23,14 @@ public class SingleConnection {
     private int connectionTankId;
     private int count;
 
-    public SingleConnection(TankManager tankManager, Socket clientSocket) {
+    private List<SingleConnection> singleConnections;
+
+    private StringBuilder infoBuilder = new StringBuilder();
+
+    public SingleConnection(TankManager tankManager, Socket clientSocket, List<SingleConnection> singleConnections) {
         this.tankManager = tankManager;
         this.clientSocket = clientSocket;
+        this.singleConnections = singleConnections;
 
         this.count = 0;
     }
@@ -48,6 +54,7 @@ public class SingleConnection {
 
             dataOut.writeUTF("server-handshake " + tank.getId());
 
+            System.out.println(String.format("Connected %s, tank id: %s", clientSocket.getInetAddress(), tank.getId()));
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -60,6 +67,10 @@ public class SingleConnection {
         try {
             dataOut.flush();
             clientSocket.close();
+            singleConnections.remove(this);
+            tankManager.removeTank(tank);
+
+            System.out.println(String.format("Disconnected %s, tank id: %s", clientSocket.getInetAddress(), tank.getId()));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -68,15 +79,14 @@ public class SingleConnection {
     public void doTick() {
         String in;
         try {
-            dataOut.writeUTF("coords - 2");
+            dataOut.writeUTF("coords x");
             in = dataIn.readUTF();
-            System.out.println("coords: " + in);
-
-            System.out.println();
+            System.out.println(String.format("ID: %s, data: %s", tank.getId(), in));
             tank.updateVariables(in);
             tank.calculateTank();
-
-
+            sendUpdate();
+        } catch (SocketException | EOFException se) {
+            stop();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -85,11 +95,18 @@ public class SingleConnection {
     public void sendUpdate() {
         String in;
         try {
-            String tankInfo = tank.getTankInfo();
-            System.out.println("tankinfo: " + tankInfo);
-            dataOut.writeUTF("update - " + tankInfo);
+            for (Tank tankS : tankManager.getTankSet()) {
+                infoBuilder.append("|").append(tankS.getTankInfo());
+            }
+
+            String outStr = "update " + infoBuilder.toString().replaceFirst("\\|", "");
+            dataOut.writeUTF(outStr);
+
+            infoBuilder = new StringBuilder();
+
             in = dataIn.readUTF();
-            System.out.println(in);
+        } catch (SocketException | EOFException se) {
+            stop();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -70,7 +70,7 @@ public class Main extends Application {
             connection = new Connection("network");
             connection.start();
 
-            Text frameRate = new Text(10, 50, "This is a test");
+            Text frameRate = new Text(10, 50, "This is a text");
 
             AnimationTimer animationTimer = new AnimationTimer() {
                 long lastTime;

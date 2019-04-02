@@ -70,10 +70,8 @@ public class Connection extends Thread {
                 switch (serverPacket.getCommand()) {
                     case "update":
                         String[] tanksArray = serverPacket.getPayload().split("\\|");
-
                         for (String tank : tanksArray) {
-                            System.out.println("Tankarray: " + tank);
-                            Main.tankManager.updateTank(tank);
+                            Main.tankManager.updateTank(tank.trim());
                         }
 
                         dataOut.writeUTF("update completed");

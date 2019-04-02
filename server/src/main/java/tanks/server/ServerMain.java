@@ -1,6 +1,5 @@
 package tanks.server;
 
-import tanks.server.persistence.Tank;
 import tanks.server.persistence.TankManager;
 
 import java.io.IOException;
@@ -26,18 +25,18 @@ public class ServerMain extends Thread {
         //serverSocket.setSoTimeout(10000);
 
         singleConnections = new ArrayList<>();
-        scheduler.scheduleAtFixedRate(this::serverTick, 0, 2, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(this::serverTick, 0, 50, TimeUnit.MILLISECONDS);
     }
 
     public void run() {
-        while(true) {
-            tankManager = new TankManager();
+        tankManager = new TankManager();
 
+        while(true) {
             try {
                 System.out.println("Waiting for client on port " + serverSocket.getLocalPort() + "...");
                 Socket client = serverSocket.accept();
 
-                SingleConnection singleConnection = new SingleConnection(tankManager, client);
+                SingleConnection singleConnection = new SingleConnection(tankManager, client, singleConnections);
                 boolean hsSuccess = singleConnection.tryHandShake();
 
                 if (hsSuccess) singleConnections.add(singleConnection);
@@ -55,10 +54,6 @@ public class ServerMain extends Thread {
     private void serverTick() {
         for (SingleConnection singleConnection : singleConnections) {
             singleConnection.doTick();
-        }
-
-        for (SingleConnection singleConnection : singleConnections) {
-            singleConnection.sendUpdate();
         }
     }
 

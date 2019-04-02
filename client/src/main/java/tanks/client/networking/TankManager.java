@@ -57,7 +57,6 @@ public class TankManager {
         String[] values = dataString.split(" ");
 
         String id = values[0];
-
         TankLocal tankBase = (TankLocal) getTankById(id);
 
         if (tankBase == null) {
@@ -76,8 +75,6 @@ public class TankManager {
         tankBase.setPositionY(posY);
         tankBase.setHullRotation(hullAngle);
         tankBase.setTurretRotation(turretAngle);
-
-        System.out.println("Base: " + tankBase.getPositionX() + "|" + tankBase.getPositionY());
     }
 
     /**
@@ -89,7 +86,7 @@ public class TankManager {
      * @return
      */
     public String getTankData() {
-        if (tankLocal == null) return "Not found";
+        if (tankLocal == null) return "";
 
         int posX = tankLocal.getPositionX();
         int posY = tankLocal.getPositionY();
