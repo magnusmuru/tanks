@@ -50,10 +50,13 @@ public class Connection extends Thread {
 
             Packet handShakePacket = Packet.parseMsgToPacket(handShakeResponse);
 
+            // Response must be "server-handshake {id}"
             if (!handShakePacket.getCommand().equals("server-handshake"))
                 throw new InvalidHandshakeResponseException(handShakeResponse);
 
             Main.tankManager.addLocalTank(handShakePacket.getPayload());
+
+            handShakePacket = null;
 
             String serverMessage = "";
 
@@ -67,18 +70,18 @@ public class Connection extends Thread {
                 switch (serverPacket.getCommand()) {
                     case "update":
                         String[] tanksArray = serverPacket.getPayload().split("\\|");
-
-                        for (String tank : tanksArray)
-                            Main.tankManager.updateTank(tank);
+                        for (String tank : tanksArray) {
+                            Main.tankManager.updateTank(tank.trim());
+                        }
 
                         dataOut.writeUTF("update completed");
                         break;
                     case "coords":
                         String id = serverPacket.getPayload();
-                        TankBase tank = Main.tankManager.getTankById(id);
+                        TankBase tank = Main.tankManager.getTankLocal();
 
                         if (tank != null) {
-                            dataOut.writeUTF(Main.tankManager.getTankData(id));
+                            dataOut.writeUTF(Main.tankManager.getTankData());
                         } else {
                             dataOut.writeUTF("puruks");
                         }
