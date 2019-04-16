@@ -16,8 +16,6 @@ public class TankManager {
     @Getter private Set<TankBase> tanks;
     @Getter private TankLocal tankLocal;
 
-    private ScheduledExecutorService scheduler;
-
     public TankManager() {
         this.tanks = new HashSet<>();
     }

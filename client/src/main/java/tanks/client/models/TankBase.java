@@ -43,4 +43,8 @@ public class TankBase {
         this.hullImage = new Image(url);
         this.hullView = new ImageView(hullImage);
     }
+
+    protected void remove() {
+
+    }
 }

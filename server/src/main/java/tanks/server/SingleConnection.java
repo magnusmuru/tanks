@@ -23,14 +23,14 @@ public class SingleConnection {
     private int connectionTankId;
     private int count;
 
-    private List<SingleConnection> singleConnections;
+    private ServerMain serverInstance;
 
     private StringBuilder infoBuilder = new StringBuilder();
 
-    public SingleConnection(TankManager tankManager, Socket clientSocket, List<SingleConnection> singleConnections) {
+    public SingleConnection(TankManager tankManager, Socket clientSocket, ServerMain serverInstance) {
         this.tankManager = tankManager;
         this.clientSocket = clientSocket;
-        this.singleConnections = singleConnections;
+        this.serverInstance = serverInstance;
 
         this.count = 0;
     }
@@ -66,13 +66,14 @@ public class SingleConnection {
     public void stop() {
         try {
             dataOut.flush();
+
             clientSocket.close();
-            singleConnections.remove(this);
+            serverInstance.singleConnections.remove(this);
             tankManager.removeTank(tank);
 
             System.out.println(String.format("Disconnected %s, tank id: %s", clientSocket.getInetAddress(), tank.getId()));
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("SingleConnection : 76");
         }
     }
 
@@ -84,7 +85,6 @@ public class SingleConnection {
             System.out.println(String.format("ID: %s, data: %s", tank.getId(), in));
             tank.updateVariables(in);
             tank.calculateTank();
-            sendUpdate();
         } catch (SocketException | EOFException se) {
             stop();
         } catch (Exception e) {

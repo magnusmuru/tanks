@@ -55,6 +55,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         instance = this;
         root = new Group();
+        Group tanks = new Group();
 
         scene = new Scene(root, windowWidth, windowHeight);
         Title title = new Title();
@@ -88,9 +89,10 @@ public class Main extends Application {
 
                     frameRate.setText(String.format("%1$.2f", 1000 / deltaMillis) + " fps");
 
+                    tanks.getChildren().clear();
                     for (TankBase tank : tankManager.getTanks()) {
-                        if (!root.getChildren().contains(tank.getHullView()))
-                            root.getChildren().add(tank.getHullView());
+                        if (!tanks.getChildren().contains(tank.getHullView()))
+                            tanks.getChildren().add(tank.getHullView());
 
                         tank.render();
                     }
@@ -100,12 +102,17 @@ public class Main extends Application {
             };
             animationTimer.start();
 
-            root.getChildren().add(frameRate);
+            root.getChildren().addAll(frameRate, tanks);
 
             primaryStage.setScene(scene);
             primaryStage.show();
 
         });
+    }
+
+    @Override
+    public void stop(){
+        connection.end();
     }
 
     public static Main getInstance() {

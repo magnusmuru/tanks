@@ -22,6 +22,8 @@ public class Connection extends Thread {
     private final String hostName = "localhost";
     private final int portNumber = 3000;
 
+    boolean shouldContinue = true;
+
     public Connection(String threadName) {
         this.threadName = threadName;
     }
@@ -60,7 +62,6 @@ public class Connection extends Thread {
 
             String serverMessage = "";
 
-            boolean shouldContinue = true;
             Packet serverPacket = null;
             while (shouldContinue) {
                 serverMessage = dataIn.readUTF();
@@ -109,5 +110,9 @@ public class Connection extends Thread {
         } catch(Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void end() {
+        shouldContinue = false;
     }
 }
