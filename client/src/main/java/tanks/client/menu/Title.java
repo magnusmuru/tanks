@@ -11,6 +11,9 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
@@ -19,6 +22,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import tanks.client.models.TankControls;
+
+import java.nio.file.Paths;
 
 public class Title {
     public Button play_button;
@@ -90,6 +95,8 @@ public class Title {
         theStage.getIcons().add(new Image("/gui/menus/Jago Tanks.png")); //stage icon
 
         StackPane root = new StackPane();
+
+
 
         root.getChildren().addAll(flashScreen_node, logoContainer, buttonContainer);
         Scene theScene = new Scene(root, CANVAS_WIDTH, CANVAS_HEIGHT, Color.BLACK);

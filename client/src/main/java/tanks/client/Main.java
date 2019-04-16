@@ -14,7 +14,9 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import tanks.client.menu.Customize;
@@ -23,6 +25,7 @@ import tanks.client.models.TankLocal;
 import tanks.client.networking.Connection;
 import tanks.client.networking.TankManager;
 import tanks.client.menu.Title;
+import javafx.scene.media.Media;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -30,6 +33,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.file.Paths;
 import java.util.Scanner;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -40,7 +44,7 @@ public class Main extends Application {
     private static Main instance;
 
     private static int windowWidth = 800;
-    private static int windowHeight = 450;
+    private static int windowHeight = 490;
 
     private static Connection connection;
     public static TankManager tankManager;
@@ -55,17 +59,25 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         instance = this;
+
+        Media m = new Media(Paths.get("D:\\Projects\\Java\\iti0202-2019-Tanks\\client\\src\\main\\resources\\gui\\menus\\Main.mp3").toUri().toString());
+        MediaPlayer player = new MediaPlayer(m);
+        player.setAutoPlay(true);
+        MediaView mediaView = new MediaView(player);
+
         root = new Group();
+        root.getChildren().addAll(mediaView);
 
         scene = new Scene(root, windowWidth, windowHeight);
         Title title = new Title();
         title.showTitle(primaryStage).show();
 
-        primaryStage.setTitle("The Game");
+        primaryStage.setTitle("Jago Tanks!");
         primaryStage.setWidth(windowWidth);
         primaryStage.setHeight(windowHeight);
 
         tankManager = new TankManager();
+
 
         title.play_button.setOnAction(e -> {
             connection = new Connection("network");

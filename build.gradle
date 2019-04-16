@@ -31,7 +31,7 @@ project(":client") {
     apply plugin: 'org.openjfx.javafxplugin'
 
     javafx {
-        modules = [ 'javafx.controls', 'javafx.fxml' ]
+        modules = ['javafx.controls', 'javafx.fxml', 'javafx.media']
     }
 
     group 'tanks.client'
