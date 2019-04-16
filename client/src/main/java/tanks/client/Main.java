@@ -56,7 +56,6 @@ public class Main extends Application {
 
         scene = new Scene(root, windowWidth, windowHeight);
         Title title = new Title();
-        Customize customizeMenu = new Customize();
         title.showTitle(primaryStage).show();
 
         title.play_button.setOnAction(e -> {
