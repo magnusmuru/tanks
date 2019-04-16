@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import tanks.client.menu.Customize;
 import tanks.client.models.TankBase;
 import tanks.client.models.TankLocal;
 import tanks.client.networking.Connection;
