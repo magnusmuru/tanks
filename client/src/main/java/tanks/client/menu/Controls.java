@@ -1,6 +1,7 @@
 package tanks.client.menu;
 
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -9,6 +10,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.InputEvent;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundSize;
@@ -23,7 +26,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import tanks.client.models.TankControls;
 
-import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.EventListener;
 
@@ -77,11 +79,20 @@ public class Controls {
         Button forwards = new Button();
         forwards.setBackground(new Background(new BackgroundImage(new Image("/gui/menus/icons/PlayBackgroundLong.png"),
                 null, null, null, null)));
-        forwards.setText(tankControls.getUp());
         forwards.setTextFill(Color.WHITE);
+        forwards.textProperty().bind(tankControls.getUp());
         forwards.setOnAction(event -> {
-            forwards.setText("Press any key");
+            EventHandler<KeyEvent> filter = new EventHandler<KeyEvent>() {
+                @Override
+                public void handle(KeyEvent event) {
+                    System.out.println(event.getText());
+                    tankControls.getUp().setValue(event.getText());
+                    event.consume();
+                    forwards.removeEventFilter(KeyEvent.KEY_TYPED, this);
+                }
+            };
 
+            forwards.addEventFilter(KeyEvent.KEY_TYPED, filter);
         });
 
         Button backwards = new Button();

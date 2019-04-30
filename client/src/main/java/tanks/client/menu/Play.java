@@ -34,19 +34,14 @@ public class Play {
         final ImageView flashScreen_node = new ImageView();
         flashScreen_node.setImage(playScreen);
 
-        Rectangle r1 = new Rectangle(296, 128);
-        Rectangle r2 = new Rectangle(133, 247);
-        Rectangle r3 = new Rectangle(329, 176);
-        Rectangle r4 = new Rectangle(131, 295);
-        r1.setLocation(584,425);
-        r2.setLocation(800,285);
-        r3.setLocation(1029,432);
-        r4.setLocation(800,556);
+        Rectangle r1 = new Rectangle(584, 425, 296, 128);
+        Rectangle r2 = new Rectangle(800, 285, 133, 247);
+        Rectangle r3 = new Rectangle(1029, 432, 329, 176);
+        Rectangle r4 = new Rectangle(800, 556, 131, 295);
         r1.setBounds(r1);
         r2.setBounds(r2);
         r3.setBounds(r3);
         r4.setBounds(r4);
-        r1.setBounds(584,425,296,128);
 
 
         connection.start();

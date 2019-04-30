@@ -10,11 +10,17 @@ public class Tank {
     private static final int WIDTH = 1600;
     private static final int HEIGHT = 860;
 
-    @Getter public int id;
+    @Getter
+    public int id;
 
-    @Getter @Setter protected int positionX, positionY, mouseX, mouseY;
-    @Getter @Setter protected double hullRotation, turretRotation;
-    @Getter boolean isRightPressed, isLeftPressed, isUpPressed, isDownPressed;
+    @Getter
+    @Setter
+    protected int positionX, positionY, mouseX, mouseY;
+    @Getter
+    @Setter
+    protected double hullRotation, turretRotation;
+    @Getter
+    boolean isRightPressed, isLeftPressed, isUpPressed, isDownPressed;
 
     final double hullRotationFactor = 5;
     final double speedFactor = 4;
@@ -54,10 +60,10 @@ public class Tank {
         if (positionX < 0) positionX = 0;
         else if (WIDTH < positionX) positionX = WIDTH;
 
-        if (isLeftPressed) {
+        if (isRightPressed) {
             hullRotation += hullRotationFactor;
             if (hullRotation > 360) hullRotation -= 360;
-        } else if (isRightPressed) {
+        } else if (isLeftPressed) {
             hullRotation -= hullRotationFactor;
             if (hullRotation < 0) hullRotation += 360;
         }
