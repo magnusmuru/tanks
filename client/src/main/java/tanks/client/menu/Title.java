@@ -22,6 +22,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import tanks.client.models.TankControls;
+import tanks.client.models.TankCustomizer;
 
 import java.nio.file.Paths;
 
@@ -34,9 +35,10 @@ public class Title {
 
     public Stage showTitle(Stage theStage) {
         TankControls tankControls = new TankControls();
+        TankCustomizer tankCustomizer = new TankCustomizer();
 
-        final double CANVAS_WIDTH = 800;
-        final double CANVAS_HEIGHT = 450;
+        final double CANVAS_WIDTH = 1600;
+        final double CANVAS_HEIGHT = 900;
 
         final Image titleScreen = new Image("/gui/menus/Title.png"); //title screen image
         final Image playButton = new Image("/gui/menus/icons/PlayTransparent.png"); //the play button image
@@ -97,7 +99,6 @@ public class Title {
         StackPane root = new StackPane();
 
 
-
         root.getChildren().addAll(flashScreen_node, logoContainer, buttonContainer);
         Scene theScene = new Scene(root, CANVAS_WIDTH, CANVAS_HEIGHT, Color.BLACK);
         theStage.setScene(theScene);
@@ -108,7 +109,7 @@ public class Title {
 
         customize_button.setOnAction(e -> {
             Customize customizeMenu = new Customize();
-            customizeMenu.showCustomize(theStage, this).show();
+            customizeMenu.showCustomize(theStage, this, tankCustomizer).show();
         });
 
         help_button.setOnAction(event -> {
@@ -119,6 +120,11 @@ public class Title {
         control_button.setOnAction(event -> {
             Controls controlMenu = new Controls();
             controlMenu.showControls(theStage, this, tankControls).show();
+        });
+
+        play_button.setOnAction(e -> {
+            Play playMenu = new Play();
+            playMenu.showPlay(theStage).show();
         });
 
         return theStage;

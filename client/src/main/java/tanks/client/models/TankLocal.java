@@ -11,8 +11,7 @@ public class TankLocal extends TankBase {
      */
     public TankLocal() {
         super();
-
-        setHullImage("/gui/sprites/TankLocal.png");
+        setHullImage("/gui/sprites/TankBases/Tank1.png");
         getHullView().setFocusTraversable(true);
 
         getHullView().setOnKeyPressed(event -> {

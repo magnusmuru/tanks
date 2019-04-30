@@ -43,11 +43,8 @@ import java.util.concurrent.TimeUnit;
 public class Main extends Application {
     private static Main instance;
 
-    private static int windowWidth = 800;
-    private static int windowHeight = 490;
-
-    private static Connection connection;
-    public static TankManager tankManager;
+    private static int windowWidth = 1600;
+    private static int windowHeight = 900;
 
     public static Group root;
     public static Scene scene;
@@ -60,9 +57,10 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         instance = this;
 
-        Media m = new Media(Paths.get("D:\\Projects\\Java\\iti0202-2019-Tanks\\client\\src\\main\\resources\\gui\\menus\\Main.mp3").toUri().toString());
+        Media m = new Media(Paths.get("src/main/resources/gui/menus/Main.mp3").toUri().toString());
         MediaPlayer player = new MediaPlayer(m);
         player.setAutoPlay(true);
+        player.setVolume(0.05);
         MediaView mediaView = new MediaView(player);
 
         root = new Group();
@@ -75,50 +73,6 @@ public class Main extends Application {
         primaryStage.setTitle("Jago Tanks!");
         primaryStage.setWidth(windowWidth);
         primaryStage.setHeight(windowHeight);
-
-        tankManager = new TankManager();
-
-
-        title.play_button.setOnAction(e -> {
-            connection = new Connection("network");
-            connection.start();
-
-            Text frameRate = new Text(10, 50, "This is a text");
-
-            AnimationTimer animationTimer = new AnimationTimer() {
-                long lastTime;
-
-                @Override
-                public void start() {
-                    super.start();
-                    this.lastTime = System.nanoTime();
-                }
-
-                @Override
-                public void handle(long now) {
-                    double deltaNanos = now - lastTime;
-                    double deltaMillis = deltaNanos / 1000000;
-
-                    frameRate.setText(String.format("%1$.2f", 1000 / deltaMillis) + " fps");
-
-                    for (TankBase tank : tankManager.getTanks()) {
-                        if (!root.getChildren().contains(tank.getHullView()))
-                            root.getChildren().add(tank.getHullView());
-
-                        tank.render();
-                    }
-
-                    lastTime = now;
-                }
-            };
-            animationTimer.start();
-
-            root.getChildren().add(frameRate);
-
-            primaryStage.setScene(scene);
-            primaryStage.show();
-
-        });
     }
 
     public static Main getInstance() {

@@ -7,10 +7,10 @@ import lombok.Setter;
 public class TankCustomizer {
     @Getter
     @Setter
-    public Image tankImage;
+    public String tankImage;
     @Getter
     @Setter
-    public Image tankTurretImage;
+    public String tankTurretImage;
     @Getter
     @Setter
     public boolean customized = false;

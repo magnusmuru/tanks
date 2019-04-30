@@ -3,6 +3,7 @@ package tanks.client.networking;
 import tanks.client.Main;
 import tanks.client.Utils;
 import tanks.client.exceptions.InvalidHandshakeResponseException;
+import tanks.client.menu.Play;
 import tanks.client.models.TankBase;
 import tanks.client.models.TankLocal;
 
@@ -54,7 +55,7 @@ public class Connection extends Thread {
             if (!handShakePacket.getCommand().equals("server-handshake"))
                 throw new InvalidHandshakeResponseException(handShakeResponse);
 
-            Main.tankManager.addLocalTank(handShakePacket.getPayload());
+            Play.tankManager.addLocalTank(handShakePacket.getPayload());
 
             handShakePacket = null;
 
@@ -71,17 +72,17 @@ public class Connection extends Thread {
                     case "update":
                         String[] tanksArray = serverPacket.getPayload().split("\\|");
                         for (String tank : tanksArray) {
-                            Main.tankManager.updateTank(tank.trim());
+                            Play.tankManager.updateTank(tank.trim());
                         }
 
                         dataOut.writeUTF("update completed");
                         break;
                     case "coords":
                         String id = serverPacket.getPayload();
-                        TankBase tank = Main.tankManager.getTankLocal();
+                        TankBase tank = Play.tankManager.getTankLocal();
 
                         if (tank != null) {
-                            dataOut.writeUTF(Main.tankManager.getTankData());
+                            dataOut.writeUTF(Play.tankManager.getTankData());
                         } else {
                             dataOut.writeUTF("puruks");
                         }

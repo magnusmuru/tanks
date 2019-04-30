@@ -7,8 +7,8 @@ import java.util.Objects;
 
 
 public class Tank {
-    private static final int WIDTH = 800;
-    private static final int HEIGHT = 400;
+    private static final int WIDTH = 1600;
+    private static final int HEIGHT = 860;
 
     @Getter public int id;
 
