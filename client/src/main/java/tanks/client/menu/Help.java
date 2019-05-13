@@ -24,8 +24,8 @@ public class Help {
 
     public Stage showHelp(Stage theStage, Title title) {
 
-        final double CANVAS_WIDTH = 800;
-        final double CANVAS_HEIGHT = 450;
+        final double CANVAS_WIDTH = 1600;
+        final double CANVAS_HEIGHT = 900;
 
 
         final Image backButton = new Image("/gui/menus/icons/Back.png");
@@ -44,14 +44,14 @@ public class Help {
         text.setFont(Font.font("Trebuchet MS", FontWeight.BOLD, FontPosture.REGULAR, 15));
         text.setTextAlignment(TextAlignment.CENTER);
         text.setText("You are a Jago Tank driver. Your job is to destroy all the other tanks to win! \n \n Customize your tank to your liking, so you spread even more fear to your enemy. \n" +
-                "Change the controls to best fit your destructive rampage! \n \n To play, start the server using...");
+                "Change the controls to best fit your destructive rampage! \n \n To play, start the server using the server .jar file \n \n After that just hit play and wage war among The Dune!");
         text.setFill(Color.WHITE);
         Group group = new Group(text);
 
 
         final HBox buttonContainer = new HBox(5);
         buttonContainer.setAlignment(Pos.TOP_CENTER);
-        Insets buttonContainerPadding = new Insets(400, 1, 1, 635);
+        Insets buttonContainerPadding = new Insets(790, 0, 0, 1300);
         buttonContainer.setPadding(buttonContainerPadding);
         buttonContainer.getChildren().addAll(back_button);
 

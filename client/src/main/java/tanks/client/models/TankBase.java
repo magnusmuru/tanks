@@ -24,7 +24,7 @@ public class TankBase {
      * Since turret has the same sprite for both local and remote tank, we'll set that here
      */
     public TankBase() {
-         this.turretSprite = new ImageView(new Image("/gui/sprites/TankLocal.png"));
+         this.turretSprite = new ImageView(new Image("/gui/sprites/TankBases/Tank1.png"));
     }
 
     /**

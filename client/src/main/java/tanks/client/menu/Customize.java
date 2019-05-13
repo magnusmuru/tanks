@@ -1,8 +1,10 @@
 package tanks.client.menu;
 
+import javafx.animation.KeyFrame;
 import javafx.geometry.Insets;
 import javafx.geometry.Point3D;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -20,13 +22,20 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import lombok.Getter;
 import lombok.Setter;
 import tanks.client.models.TankCustomizer;
 
 import java.io.File;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class Customize {
     public Button back_button;
@@ -41,21 +50,22 @@ public class Customize {
     @Setter
     public Image base_image;
     public int baseNumber = 2;
-    private File baseFolder = new File("D:\\Projects\\Java\\iti0202-2019-Tanks\\client\\src\\main\\resources\\gui\\sprites\\TankBases");
-    private List<File> listOfBaseFiles = Arrays.asList(baseFolder.listFiles());
-    private File turretFolder = new File("D:\\Projects\\Java\\iti0202-2019-Tanks\\client\\src\\main\\resources\\gui\\sprites\\TankTurrets");
+
+    public File absFile = new File("src/main/resources/gui/sprites/TankBases");
+    private List<File> listOfBaseFiles = Arrays.asList(absFile.listFiles());
+    public File turretFolder = new File("src/main/resources/gui/sprites/TankTurrets");
     private List<File> listOfTurretFiles = Arrays.asList(turretFolder.listFiles());
 
 
-    public Stage showCustomize(Stage theStage, Title title) {
+    public Stage showCustomize(Stage theStage, Title title, TankCustomizer tankCustomizer) {
 
-        final double CANVAS_WIDTH = 800;
-        final double CANVAS_HEIGHT = 450;
-
+        final double CANVAS_WIDTH = 1600;
+        final double CANVAS_HEIGHT = 900;
 
         final Image titleScreen = new Image("/gui/menus/CustomizeBackground.png");
         final Image backButton = new Image("/gui/menus/icons/Back.png");
         final Image saveButton = new Image("/gui/menus/icons/Save.png");
+        final Image savedButton = new Image("/gui/menus/icons/Saved.png");
         final Image cornerButton = new Image("/gui/menus/icons/Corner.png");
         final Image cornerButton2 = new Image("/gui/menus/icons/Corner2.png");
 
@@ -129,19 +139,21 @@ public class Customize {
 
         VBox customizeContainer = new VBox(20);
         customizeContainer.setAlignment(Pos.TOP_CENTER);
-        Insets customizeContainerPadding = new Insets(125, 1, 1, 0);
+        Insets customizeContainerPadding = new Insets(200, 0, 0, 650);
         customizeContainer.setPadding(customizeContainerPadding);
         customizeContainer.getChildren().addAll(textBase, tankBaseContainer, textTurret, tankTurretContainer);
 
-
         HBox buttonContainer = new HBox(5);
         buttonContainer.setAlignment(Pos.TOP_CENTER);
-        Insets buttonContainerPadding = new Insets(400, 1, 1, 500);
+        Insets buttonContainerPadding = new Insets(750, 0, 0, 1175);
         buttonContainer.setPadding(buttonContainerPadding);
         buttonContainer.getChildren().addAll(save_button, back_button);
 
+        Group buttonGroup = new Group(buttonContainer, customizeContainer);
+
+
         StackPane root = new StackPane();
-        root.getChildren().addAll(flashScreen_node, customizeContainer, buttonContainer);
+        root.getChildren().addAll(flashScreen_node, buttonGroup);
         Scene theScene = new Scene(root, CANVAS_WIDTH, CANVAS_HEIGHT);
         theStage.setScene(theScene);
         this.save_button = save_button;
@@ -156,20 +168,28 @@ public class Customize {
         corner_button.setOnAction(actionEvent -> {
             baseNumber++;
             base_button_node.setImage(new Image(listOfBaseFiles.get(baseNumber % listOfBaseFiles.size()).toURI().toString()));
-            base_button.setGraphic(base_button_node);
         });
 
         corner_button2.setOnAction(actionEvent -> {
             baseNumber--;
             base_button_node.setImage(new Image(listOfBaseFiles.get(baseNumber % listOfBaseFiles.size()).toURI().toString()));
-            base_button.setGraphic(base_button_node);
         });
 
         save_button.setOnAction(event -> {
-            TankCustomizer tankCustomizer = new TankCustomizer();
-            tankCustomizer.setTankImage(new Image(listOfBaseFiles.get(baseNumber % listOfBaseFiles.size()).toURI().toString()));
-            tankCustomizer.setTankTurretImage(new Image(listOfTurretFiles.get(baseNumber % listOfTurretFiles.size()).toURI().toString()));
+            tankCustomizer.setTankImage(listOfBaseFiles.get(baseNumber % listOfBaseFiles.size()).toURI().toString());
+            tankCustomizer.setTankTurretImage(listOfTurretFiles.get(baseNumber % listOfTurretFiles.size()).toURI().toString());
             tankCustomizer.setCustomized(true);
+            save_button_node.setImage(savedButton);
+
+            new java.util.Timer().schedule(
+                    new java.util.TimerTask() {
+                        @Override
+                        public void run() {
+                            save_button_node.setImage(saveButton);
+                        }
+                    },
+                    3000
+            );
         });
 
         return theStage;

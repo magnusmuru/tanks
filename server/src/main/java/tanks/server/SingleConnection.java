@@ -82,7 +82,6 @@ public class SingleConnection {
         try {
             dataOut.writeUTF("coords x");
             in = dataIn.readUTF();
-            System.out.println(String.format("ID: %s, data: %s", tank.getId(), in));
             tank.updateVariables(in);
             tank.calculateTank();
         } catch (SocketException | EOFException se) {

@@ -3,14 +3,14 @@ package tanks.client.models;
 
 import com.sun.glass.events.KeyEvent;
 import com.sun.glass.events.MouseEvent;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import lombok.Getter;
-import lombok.Setter;
 
 
 public class TankControls {
-    //@Getter
-    //@Setter
-    //public String up = KeyEvent.getTypeString(KeyEvent.VK_UP);
+    @Getter
+    public StringProperty up = new SimpleStringProperty("UP");
     //@Getter
     //@Setter
     //public String right = KeyEvent.getTypeString(KeyEvent.VK_RIGHT);
