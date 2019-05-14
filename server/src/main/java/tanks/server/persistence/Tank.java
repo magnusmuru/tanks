@@ -10,12 +10,19 @@ public class Tank {
     private static final int WIDTH = 1600;
     private static final int HEIGHT = 860;
 
-    @Getter public int id;
+    @Getter
+    public int id;
 
-    @Getter @Setter protected int positionX, positionY, mouseX, mouseY;
-    @Getter @Setter protected double hullRotation, turretRotation;
-    @Getter boolean isRightPressed, isLeftPressed, isUpPressed, isDownPressed;
-    @Getter boolean doShot;
+    @Getter
+    @Setter
+    protected int positionX, positionY, mouseX, mouseY;
+    @Getter
+    @Setter
+    protected double hullRotation, turretRotation;
+    @Getter
+    boolean isRightPressed, isLeftPressed, isUpPressed, isDownPressed;
+    @Getter
+    boolean doShot;
 
     final double hullRotationFactor = 5;
     final double speedFactor = 4;
@@ -89,6 +96,11 @@ public class Tank {
     public String getTankInfo() {
         return String.format("%s %s %s %s %s %s",
                 id, positionX, positionY, hullRotation, turretRotation, 0);
+    }
+
+    public void killSpawnTank(Tank tank) {
+        tank.setPositionX((int) (Math.random() * WIDTH));
+        tank.setPositionY((int) (Math.random() * HEIGHT));
     }
 
     @Override

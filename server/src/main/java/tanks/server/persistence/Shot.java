@@ -20,8 +20,19 @@ public class Shot {
         if (positionX > 0 && positionX < 1600 && positionY > 0 && positionY < 900) {
             positionX += speedFactor * Math.cos(Math.toRadians(rotation));
             positionY += speedFactor * Math.sin(Math.toRadians(rotation));
+            getShot(this, ServerMain.getInstance().getTankManager());
         } else {
             ServerMain.getInstance().getShotManager().removeShot(this);
+        }
+    }
+
+    public void getShot(Shot shot, TankManager tankManager) {
+        for (Tank tank : tankManager.getTankSet()) {
+            if (tank.getPositionX() - 20 > shot.getPositionX() && tank.getPositionX() + 20 < shot.getPositionX() &&
+                    tank.getPositionY() - 20 > shot.getPositionY() && tank.getPositionY() + 20 < shot.getPositionY()) {
+                tank.killSpawnTank(tank);
+                ServerMain.getInstance().getShotManager().removeShot(this);
+            }
         }
     }
 

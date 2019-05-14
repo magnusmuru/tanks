@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 public class ServerMain extends Thread {
     private static ServerMain instance;
     private ServerSocket serverSocket;
-    private TankManager tankManager;
+    @Getter private TankManager tankManager;
     @Getter private ShotManager shotManager;
 
     protected List<SingleConnection> singleConnections;
