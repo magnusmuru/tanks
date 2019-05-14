@@ -88,9 +88,9 @@ public class Connection extends Thread {
                     case "shots":
                         String[] shotsArray = serverPacket.getPayload().split("\\|");
 
-                        Play.getInstance().shots.getChildren().clear();
+                        Play.shotArrayList.clear();
                         for (String shotString : shotsArray) {
-                            Play.getInstance().shots.getChildren().add(new Shot(shotString));
+                            Play.shotArrayList.add(new Shot(shotString));
                         }
 
                         break;

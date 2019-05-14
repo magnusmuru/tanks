@@ -10,11 +10,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import tanks.client.models.Shot;
 import tanks.client.models.TankBase;
 import tanks.client.networking.Connection;
 import tanks.client.networking.TankManager;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class Play {
     private static Play instance;
@@ -27,6 +29,8 @@ public class Play {
     public static TankManager tankManager;
     public Group root, shots;
     public static Scene scene;
+
+    public static ArrayList<Shot> shotArrayList = new ArrayList<>();
 
     final double CANVAS_WIDTH = 1600;
     final double CANVAS_HEIGHT = 900;
@@ -72,6 +76,9 @@ public class Play {
 
                 frameRate.setText(String.format("%1$.2f", 1000 / deltaMillis) + " fps");
 
+                shots.getChildren().clear();
+                shots.getChildren().addAll(shotArrayList);
+
                 for (TankBase tank : tankManager.getTanks()) {
                     Arc cooldownArc = tankManager.getTankLocal().getCoolDownArc();
                     if (!tanks.getChildren().contains(cooldownArc))
@@ -91,7 +98,7 @@ public class Play {
         };
         animationTimer.start();
 
-        root.getChildren().addAll(flashScreen_node, tanks);
+        root.getChildren().addAll(flashScreen_node, tanks, shots);
         scene = new Scene(root, CANVAS_WIDTH, CANVAS_HEIGHT, Color.BLACK);
 
         theStage.setScene(scene);

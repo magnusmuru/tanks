@@ -26,8 +26,8 @@ public class TankBase {
     }
 
     protected void bindTurret() {
-        this.turretSprite.xProperty().bind(hullView.xProperty().add(20));
-        this.turretSprite.yProperty().bind(hullView.yProperty().add(20));
+        this.turretSprite.xProperty().bind(hullView.xProperty());
+        this.turretSprite.yProperty().bind(hullView.yProperty());
         this.turretSprite.rotateProperty().bind(turretRotation);
     }
 
@@ -39,9 +39,5 @@ public class TankBase {
     protected void setHullImage(String url) {
         this.hullImage = new Image(url);
         this.hullView = new ImageView(hullImage);
-    }
-
-    protected void remove() {
-
     }
 }

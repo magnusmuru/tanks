@@ -1,5 +1,7 @@
 package tanks.server;
 
+import tanks.server.persistence.Shot;
+import tanks.server.persistence.ShotManager;
 import tanks.server.persistence.Tank;
 import tanks.server.persistence.TankManager;
 
@@ -16,14 +18,15 @@ public class SingleConnection {
     private DataInputStream dataIn;
     private DataOutputStream dataOut;
 
+    private ShotManager shotManager;
     private TankManager tankManager;
     private Tank tank;
 
     private ServerMain serverInstance;
-
     private StringBuilder infoBuilder;
 
-    public SingleConnection(TankManager tankManager, Socket clientSocket, ServerMain serverInstance) {
+    public SingleConnection(TankManager tankManager, ShotManager shotManager, Socket clientSocket, ServerMain serverInstance) {
+        this.shotManager = shotManager;
         this.tankManager = tankManager;
         this.clientSocket = clientSocket;
         this.serverInstance = serverInstance;
@@ -79,6 +82,7 @@ public class SingleConnection {
             if (in.equals("stopped")) {
                 stop();
             } else {
+                shotManager.tick();
                 tank.updateVariables(in);
                 tank.calculateTank();
             }
@@ -100,6 +104,7 @@ public class SingleConnection {
             String outStr = "update " + infoBuilder.toString().replaceFirst("\\|", "");
             dataOut.writeUTF(outStr);
 
+            String in = dataIn.readUTF();
         } catch (SocketException | EOFException se) {
             stop();
         } catch (Exception e) {
@@ -111,10 +116,16 @@ public class SingleConnection {
         infoBuilder = new StringBuilder();
 
         try {
-
+            for (Shot shot : shotManager.getShots()) {
+                infoBuilder.append("|").append(shot.getShotData());
+            }
 
             String outStr = "shots " + infoBuilder.toString().replaceFirst("\\|", "");
-            dataOut.writeUTF(outStr);
+
+            if (shotManager.getShots().size() > 0) {
+                System.out.println(outStr);
+                dataOut.writeUTF(outStr);
+            }
         } catch (SocketException | EOFException se) {
             stop();
         } catch (Exception e) {

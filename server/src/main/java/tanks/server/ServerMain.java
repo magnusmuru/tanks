@@ -1,5 +1,7 @@
 package tanks.server;
 
+import lombok.Getter;
+import tanks.server.persistence.ShotManager;
 import tanks.server.persistence.Tank;
 import tanks.server.persistence.TankManager;
 
@@ -14,14 +16,17 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class ServerMain extends Thread {
+    private static ServerMain instance;
     private ServerSocket serverSocket;
     private TankManager tankManager;
+    @Getter private ShotManager shotManager;
 
     protected List<SingleConnection> singleConnections;
 
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     public ServerMain(int port) throws IOException {
+        instance = this;
         serverSocket = new ServerSocket(port);
         //serverSocket.setSoTimeout(10000);
 
@@ -31,13 +36,14 @@ public class ServerMain extends Thread {
 
     public void run() {
         tankManager = new TankManager();
+        shotManager = new ShotManager();
 
         while(true) {
             try {
                 System.out.println("Waiting for client on port " + serverSocket.getLocalPort() + "...");
                 Socket client = serverSocket.accept();
 
-                SingleConnection singleConnection = new SingleConnection(tankManager, client, this);
+                SingleConnection singleConnection = new SingleConnection(tankManager, shotManager, client, this);
                 boolean hsSuccess = singleConnection.tryHandShake();
 
                 if (hsSuccess) singleConnections.add(singleConnection);
@@ -68,12 +74,11 @@ public class ServerMain extends Thread {
             singleConnection.sendShots();
         }
 
-
         for (Tank tankS : tankManager.getTankSet()) {
             infoBuilder.append("|").append(tankS.getTankInfo());
         }
 
-        //System.out.println("update " + infoBuilder.toString().replaceFirst("\\|", ""));
+//        System.out.println("update " + infoBuilder.toString().replaceFirst("\\|", ""));
     }
 
     public static void main(String [] args) {
@@ -84,5 +89,9 @@ public class ServerMain extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static ServerMain getInstance() {
+        return instance;
     }
 }

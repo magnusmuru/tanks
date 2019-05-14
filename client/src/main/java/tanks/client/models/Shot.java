@@ -6,10 +6,11 @@ import javafx.scene.shape.Circle;
 public class Shot extends Circle{
     public Shot(String dataString) {
         String[] dataSplit = dataString.split(" ");
-        setCenterX(Integer.valueOf(dataSplit[0]));
-        setCenterY(Integer.valueOf(dataSplit[1]));
+        setCenterX(Double.valueOf(dataSplit[0]) + 20);
+        setCenterY(Double.valueOf(dataSplit[1]) + 20);
 
         setFill(Paint.valueOf("ff2121"));
+        setStroke(Paint.valueOf("#000000"));
         setRadius(3);
         setStrokeWidth(1);
     }

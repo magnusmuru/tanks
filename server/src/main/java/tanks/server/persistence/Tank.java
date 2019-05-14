@@ -2,9 +2,9 @@ package tanks.server.persistence;
 
 import lombok.Getter;
 import lombok.Setter;
+import tanks.server.ServerMain;
 
 import java.util.Objects;
-
 
 public class Tank {
     private static final int WIDTH = 1600;
@@ -73,26 +73,12 @@ public class Tank {
             positionY -= speedFactor * Math.sin(Math.toRadians(hullRotation));
         }
 
-        double mouseTrig = Math.sqrt(Math.pow(mouseX, 2) + Math.pow(mouseY, 2));
-        double tankTrig = Math.sqrt(Math.pow(positionX, 2) + Math.pow(positionY, 2));
-        double x = positionX - mouseX;
-        double y = positionY - mouseY;
+        double angle = Math.atan2(mouseY - positionY, mouseX - positionX);
+        turretRotation = Math.toDegrees(angle);
 
-        if (x < 0 && y < 0) {
-            turretRotation = Math.atan(mouseTrig / tankTrig);
-        } else if (x < 0 && y > 0) {
-            turretRotation = Math.atan(mouseTrig / tankTrig) + 90;
-        } else if (x > 0 && y > 0) {
-            turretRotation = Math.atan(mouseTrig / tankTrig) + 180;
-        } else if (x > 0 && y < 0) {
-            turretRotation = Math.atan(mouseTrig / tankTrig) + 270;
+        if (doShot) {
+            ServerMain.getInstance().getShotManager().addShot(new Shot(positionX, positionY, turretRotation));
         }
-        if (turretRotation > 360) {
-            turretRotation -= 360;
-        }
-
-
-        if (doShot) System.out.println(String.format("Shot - %s", id));
     }
 
     /**
