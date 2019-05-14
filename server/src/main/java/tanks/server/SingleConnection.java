@@ -9,7 +9,6 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.List;
 
 public class SingleConnection {
     private Socket clientSocket;
@@ -20,19 +19,14 @@ public class SingleConnection {
     private TankManager tankManager;
     private Tank tank;
 
-    private int connectionTankId;
-    private int count;
-
     private ServerMain serverInstance;
 
-    private StringBuilder infoBuilder = new StringBuilder();
+    private StringBuilder infoBuilder;
 
     public SingleConnection(TankManager tankManager, Socket clientSocket, ServerMain serverInstance) {
         this.tankManager = tankManager;
         this.clientSocket = clientSocket;
         this.serverInstance = serverInstance;
-
-        this.count = 0;
     }
 
     public boolean tryHandShake() {
@@ -58,22 +52,21 @@ public class SingleConnection {
             return true;
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
-
-        return false;
     }
 
     public void stop() {
         try {
-            dataOut.flush();
-
             clientSocket.close();
+            dataIn.close();
+            dataOut.close();
             serverInstance.singleConnections.remove(this);
             tankManager.removeTank(tank);
 
             System.out.println(String.format("Disconnected %s, tank id: %s", clientSocket.getInetAddress(), tank.getId()));
         } catch (IOException e) {
-            System.out.println("SingleConnection : 76");
+            System.out.println("SingleConnection: 74");
         }
     }
 
@@ -82,8 +75,13 @@ public class SingleConnection {
         try {
             dataOut.writeUTF("coords x");
             in = dataIn.readUTF();
-            tank.updateVariables(in);
-            tank.calculateTank();
+
+            if (in.equals("stopped")) {
+                stop();
+            } else {
+                tank.updateVariables(in);
+                tank.calculateTank();
+            }
         } catch (SocketException | EOFException se) {
             stop();
         } catch (Exception e) {
@@ -92,7 +90,8 @@ public class SingleConnection {
     }
 
     public void sendUpdate() {
-        String in;
+        infoBuilder = new StringBuilder();
+
         try {
             for (Tank tankS : tankManager.getTankSet()) {
                 infoBuilder.append("|").append(tankS.getTankInfo());
@@ -101,9 +100,21 @@ public class SingleConnection {
             String outStr = "update " + infoBuilder.toString().replaceFirst("\\|", "");
             dataOut.writeUTF(outStr);
 
-            infoBuilder = new StringBuilder();
+        } catch (SocketException | EOFException se) {
+            stop();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-            in = dataIn.readUTF();
+    public void sendShots() {
+        infoBuilder = new StringBuilder();
+
+        try {
+
+
+            String outStr = "shots " + infoBuilder.toString().replaceFirst("\\|", "");
+            dataOut.writeUTF(outStr);
         } catch (SocketException | EOFException se) {
             stop();
         } catch (Exception e) {

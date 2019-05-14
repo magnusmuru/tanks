@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Arc;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import tanks.client.models.TankBase;
@@ -16,18 +17,26 @@ import tanks.client.networking.TankManager;
 import java.awt.*;
 
 public class Play {
+    private static Play instance;
 
-    private static Connection connection;
+    public Play() {
+        instance = this;
+    }
+
+    public static Connection connection;
     public static TankManager tankManager;
-    public static Group root;
+    public Group root, shots;
     public static Scene scene;
+
+    final double CANVAS_WIDTH = 1600;
+    final double CANVAS_HEIGHT = 900;
 
     public Stage showPlay(Stage theStage) {
         connection = new Connection("network");
         tankManager = new TankManager();
         root = new Group();
-        final double CANVAS_WIDTH = 1600;
-        final double CANVAS_HEIGHT = 900;
+        shots = new Group();
+        Group tanks = new Group();
 
         final Image playScreen = new Image("/gui/menus/Play Stage.png");
 
@@ -42,7 +51,6 @@ public class Play {
         r2.setBounds(r2);
         r3.setBounds(r3);
         r4.setBounds(r4);
-
 
         connection.start();
 
@@ -65,8 +73,15 @@ public class Play {
                 frameRate.setText(String.format("%1$.2f", 1000 / deltaMillis) + " fps");
 
                 for (TankBase tank : tankManager.getTanks()) {
-                    if (!root.getChildren().contains(tank.getHullView()))
-                        root.getChildren().add(tank.getHullView());
+                    Arc cooldownArc = tankManager.getTankLocal().getCoolDownArc();
+                    if (!tanks.getChildren().contains(cooldownArc))
+                        tanks.getChildren().add(cooldownArc);
+
+                    if (!tanks.getChildren().contains(tank.getHullView()))
+                        tanks.getChildren().add(tank.getHullView());
+
+                    if (!tanks.getChildren().contains(tank.getTurretSprite()))
+                        tanks.getChildren().add(tank.getTurretSprite());
 
                     tank.render();
                 }
@@ -76,11 +91,15 @@ public class Play {
         };
         animationTimer.start();
 
-        root.getChildren().add(flashScreen_node);
+        root.getChildren().addAll(flashScreen_node, tanks);
         scene = new Scene(root, CANVAS_WIDTH, CANVAS_HEIGHT, Color.BLACK);
 
         theStage.setScene(scene);
 
         return theStage;
+    }
+
+    public static Play getInstance() {
+        return instance;
     }
 }

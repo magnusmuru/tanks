@@ -98,7 +98,6 @@ public class Title {
 
         StackPane root = new StackPane();
 
-
         root.getChildren().addAll(flashScreen_node, logoContainer, buttonContainer);
         Scene theScene = new Scene(root, CANVAS_WIDTH, CANVAS_HEIGHT, Color.BLACK);
         theStage.setScene(theScene);
@@ -121,6 +120,12 @@ public class Title {
             Controls controlMenu = new Controls();
             controlMenu.showControls(theStage, this, tankControls).show();
         });
+
+        theStage.setResizable(false);
+        theStage.setMinWidth(CANVAS_WIDTH);
+        theStage.setMaxWidth(CANVAS_WIDTH);
+        theStage.setMinHeight(CANVAS_HEIGHT);
+        theStage.setMaxHeight(CANVAS_HEIGHT);
 
         play_button.setOnAction(e -> {
             Play playMenu = new Play();

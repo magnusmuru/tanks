@@ -3,9 +3,11 @@ package tanks.client.networking;
 import lombok.Getter;
 import lombok.Setter;
 import tanks.client.Main;
+import tanks.client.menu.Play;
 import tanks.client.models.TankBase;
 import tanks.client.models.TankCustomizer;
 import tanks.client.models.TankLocal;
+import tanks.client.models.TankRemote;
 
 import java.util.HashSet;
 import java.util.List;
@@ -26,11 +28,12 @@ public class TankManager {
         this.tanks.add(tank);
     }
 
-    public void addLocalTank(String id) {
+    public void addTankLocal(String id) {
         TankLocal tankLocal = new TankLocal();
-        tankLocal.id = id;
+        tankLocal.setId(id);
 
-        Main.scene.setOnMouseMoved(event -> tankLocal.setMousePosition(event.getSceneX(), event.getSceneY()));
+        Play.scene.setOnMouseMoved(event -> tankLocal.setMousePosition(event.getSceneX(), event.getSceneY()));
+        Play.scene.setOnMouseClicked(event -> tankLocal.doShot());
 
         this.tankLocal = tankLocal;
         addTank(tankLocal);
@@ -39,10 +42,6 @@ public class TankManager {
     public TankBase getTankById(String id) {
         Optional<TankBase> oTankBase = this.tanks.stream().filter(tankBase -> tankBase.getId().equals(id)).findFirst();
         return oTankBase.orElse(null);
-    }
-
-    public void flushManager() {
-        this.tanks.clear();
     }
 
     /**
@@ -57,50 +56,50 @@ public class TankManager {
         String[] values = dataString.split(" ");
 
         String id = values[0];
-        TankLocal tankBase = (TankLocal) getTankById(id);
 
+        TankBase tankBase = getTankById(id);
         if (tankBase == null) {
-            tankBase = new TankLocal();
-            tankBase.id = id;
-            addTank(tankBase);
+            if (tankLocal == null) {
+                addTankLocal(id);
+            } else {
+                TankRemote tankRemote = new TankRemote();
+                tankRemote.setId(id);
+                addTank(tankRemote);
+            }
+
+            tankBase = getTankById(id);
         }
 
         int posX = Integer.parseInt(values[1]);
         int posY = Integer.parseInt(values[2]);
         double hullAngle = Double.parseDouble(values[3]);
         double turretAngle = Double.parseDouble(values[4]);
-        double shotCooldown = Double.parseDouble(values[5]);
 
         tankBase.setPositionX(posX);
         tankBase.setPositionY(posY);
         tankBase.setHullRotation(hullAngle);
-        tankBase.setTurretRotation(turretAngle);
+        tankBase.getTurretRotation().set(turretAngle);
     }
 
     /**
      * Queries tank data
      *
      * Returnable dataString looks like this:
-     * [ID] [x] [y] [mouseX] [mouseY] [isUpPressed] [isDownPressed] [isLeftPressed] [isRightPressed]
+     * [ID] [x] [y] [mouseX] [mouseY] [isUpPressed] [isDownPressed] [isLeftPressed] [isRightPressed] [shouldShoot]
      *
      * @return
      */
     public String getTankData() {
         if (tankLocal == null) return "";
 
-        int posX = tankLocal.getPositionX();
-        int posY = tankLocal.getPositionY();
-
-        int mouseX = tankLocal.getMouseX();
-        int mouseY = tankLocal.getMouseY();
-
-        boolean isUpPressed = tankLocal.isUpPressed();
-        boolean isDownPressed = tankLocal.isDownPressed();
-        boolean isLeftPressed = tankLocal.isLeftPressed();
-        boolean isRightPressed = tankLocal.isRightPressed();
-
-        return String.format("%s %s %s %s %s %s %s %s %s",
-                tankLocal.id, posX, posY, mouseX, mouseY,
-                isUpPressed, isDownPressed, isLeftPressed, isRightPressed);
+        return String.format("%s %s %s %s %s %s %s %s %s %s",
+                tankLocal.getId(),
+                tankLocal.getPositionX(), tankLocal.getPositionY(),
+                tankLocal.getMouseX(), tankLocal.getMouseY(),
+                tankLocal.getIsUpPressed().get(),
+                tankLocal.getIsDownPressed().get(),
+                tankLocal.getIsLeftPressed().get(),
+                tankLocal.getIsRightPressed().get(),
+                tankLocal.getShot());
     }
 }

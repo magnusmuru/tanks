@@ -13,7 +13,7 @@ public class Packet {
     private String command;
     private String payload;
 
-    private static String commandPattern = "^((?:\\w+-\\w+)|(?:\\w+)(?: ))(.+)$";
+    private static final String commandPattern = "^((?:\\w+-\\w+)|(?:\\w+)(?: ))(.+)$";
 
     public static Packet parseMsgToPacket(String serverMessage) {
         Pattern pattern = Pattern.compile(commandPattern);

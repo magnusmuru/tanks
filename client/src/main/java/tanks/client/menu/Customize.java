@@ -43,12 +43,10 @@ public class Customize {
     public Button base_button;
     public Button corner_button;
     public Button corner_button2;
-    @Getter
-    @Setter
-    public Image turret_image;
-    @Getter
-    @Setter
-    public Image base_image;
+    @Getter @Setter public Image turret_image;
+    @Getter @Setter public Image base_image;
+
+
     public int baseNumber = 2;
 
     public File absFile = new File("src/main/resources/gui/sprites/TankBases");

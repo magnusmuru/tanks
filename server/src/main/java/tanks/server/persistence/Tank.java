@@ -10,17 +10,12 @@ public class Tank {
     private static final int WIDTH = 1600;
     private static final int HEIGHT = 860;
 
-    @Getter
-    public int id;
+    @Getter public int id;
 
-    @Getter
-    @Setter
-    protected int positionX, positionY, mouseX, mouseY;
-    @Getter
-    @Setter
-    protected double hullRotation, turretRotation;
-    @Getter
-    boolean isRightPressed, isLeftPressed, isUpPressed, isDownPressed;
+    @Getter @Setter protected int positionX, positionY, mouseX, mouseY;
+    @Getter @Setter protected double hullRotation, turretRotation;
+    @Getter boolean isRightPressed, isLeftPressed, isUpPressed, isDownPressed;
+    @Getter boolean doShot;
 
     final double hullRotationFactor = 5;
     final double speedFactor = 4;
@@ -51,6 +46,8 @@ public class Tank {
         isDownPressed = Boolean.valueOf(dataParts[6]);
         isLeftPressed = Boolean.valueOf(dataParts[7]);
         isRightPressed = Boolean.valueOf(dataParts[8]);
+        doShot = Boolean.valueOf(dataParts[9]);
+
     }
 
     public void calculateTank() {
@@ -75,6 +72,18 @@ public class Tank {
             positionX -= speedFactor * Math.cos(Math.toRadians(hullRotation));
             positionY -= speedFactor * Math.sin(Math.toRadians(hullRotation));
         }
+
+        double x = mouseX - positionX;
+        double y = mouseY - positionY;
+
+        if (x == 0 && y == 0) {
+            turretRotation = 0;
+        } else  {
+
+        }
+
+
+        if (doShot) System.out.println(String.format("Shot - %s", id));
     }
 
     /**

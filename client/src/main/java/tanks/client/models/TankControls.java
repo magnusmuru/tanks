@@ -1,12 +1,8 @@
 package tanks.client.models;
 
-
-import com.sun.glass.events.KeyEvent;
-import com.sun.glass.events.MouseEvent;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import lombok.Getter;
-
 
 public class TankControls {
     @Getter

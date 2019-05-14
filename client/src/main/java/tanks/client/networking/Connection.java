@@ -1,9 +1,8 @@
 package tanks.client.networking;
 
-import tanks.client.Main;
-import tanks.client.Utils;
 import tanks.client.exceptions.InvalidHandshakeResponseException;
 import tanks.client.menu.Play;
+import tanks.client.models.Shot;
 import tanks.client.models.TankBase;
 import tanks.client.models.TankLocal;
 
@@ -12,7 +11,6 @@ import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Arrays;
 
 public class Connection extends Thread {
     private Thread thread;
@@ -24,6 +22,10 @@ public class Connection extends Thread {
     private final int portNumber = 3000;
 
     boolean shouldContinue = true;
+
+    private Socket socket = null;
+    private DataInputStream dataIn;
+    private DataOutputStream dataOut;
 
     public Connection(String threadName) {
         this.threadName = threadName;
@@ -37,12 +39,17 @@ public class Connection extends Thread {
         }
     }
 
+    public void sendShot() {
+        try {
+            TankLocal local = Play.tankManager.getTankLocal();
+            dataOut.writeUTF(String.format("shot %s %s %s", local.getId(), local.getMouseX(), local.getMouseY()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void run() {
-        Socket socket = null;
-        DataInputStream dataIn;
-        DataOutputStream dataOut;
-
         try {
             socket = new Socket(hostName, portNumber);
             dataIn = new DataInputStream(socket.getInputStream());
@@ -57,13 +64,12 @@ public class Connection extends Thread {
             if (!handShakePacket.getCommand().equals("server-handshake"))
                 throw new InvalidHandshakeResponseException(handShakeResponse);
 
-            Play.tankManager.addLocalTank(handShakePacket.getPayload());
+            Play.tankManager.addTankLocal(handShakePacket.getPayload());
 
             handShakePacket = null;
 
-            String serverMessage = "";
-
-            Packet serverPacket = null;
+            String serverMessage;
+            Packet serverPacket;
             while (shouldContinue) {
                 serverMessage = dataIn.readUTF();
 
@@ -74,12 +80,21 @@ public class Connection extends Thread {
                         String[] tanksArray = serverPacket.getPayload().split("\\|");
                         for (String tank : tanksArray) {
                             Play.tankManager.updateTank(tank.trim());
+                            Play.tankManager.getTankLocal().tickShotCooldown();
                         }
 
                         dataOut.writeUTF("update completed");
                         break;
+                    case "shots":
+                        String[] shotsArray = serverPacket.getPayload().split("\\|");
+
+                        Play.getInstance().shots.getChildren().clear();
+                        for (String shotString : shotsArray) {
+                            Play.getInstance().shots.getChildren().add(new Shot(shotString));
+                        }
+
+                        break;
                     case "coords":
-                        String id = serverPacket.getPayload();
                         TankBase tank = Play.tankManager.getTankLocal();
 
                         if (tank != null) {
@@ -89,8 +104,7 @@ public class Connection extends Thread {
                         }
                         break;
                     case "stop":
-                        shouldContinue = false;
-                        dataOut.writeUTF("stopped");
+                        end();
                         break;
                     default:
                         System.out.println("Server says: " + serverMessage);
@@ -114,6 +128,11 @@ public class Connection extends Thread {
     }
 
     public void end() {
-        shouldContinue = false;
+        try {
+            dataOut.writeUTF("stopped");
+            shouldContinue = false;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -1,9 +1,6 @@
 package tanks.client;
 
-import tanks.client.networking.Packet;
-
 import java.text.DecimalFormat;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Utils {

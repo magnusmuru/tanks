@@ -26,7 +26,7 @@ public class ServerMain extends Thread {
         //serverSocket.setSoTimeout(10000);
 
         singleConnections = new ArrayList<>();
-        scheduler.scheduleAtFixedRate(this::serverTick, 0, 100, TimeUnit.MILLISECONDS);
+        scheduler.scheduleAtFixedRate(this::serverTick, 0, 30, TimeUnit.MILLISECONDS);
     }
 
     public void run() {
@@ -54,6 +54,8 @@ public class ServerMain extends Thread {
 
     StringBuilder infoBuilder;
     private void serverTick() {
+        infoBuilder = new StringBuilder();
+
         for (SingleConnection singleConnection : singleConnections) {
             singleConnection.doTick();
         }
@@ -62,13 +64,16 @@ public class ServerMain extends Thread {
             singleConnection.sendUpdate();
         }
 
+        for (SingleConnection singleConnection : singleConnections) {
+            singleConnection.sendShots();
+        }
+
 
         for (Tank tankS : tankManager.getTankSet()) {
             infoBuilder.append("|").append(tankS.getTankInfo());
         }
 
-        infoBuilder = new StringBuilder();
-        System.out.println("update " + infoBuilder.toString().replaceFirst("\\|", ""));
+        //System.out.println("update " + infoBuilder.toString().replaceFirst("\\|", ""));
     }
 
     public static void main(String [] args) {
