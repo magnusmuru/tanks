@@ -73,13 +73,22 @@ public class Tank {
             positionY -= speedFactor * Math.sin(Math.toRadians(hullRotation));
         }
 
-        double x = mouseX - positionX;
-        double y = mouseY - positionY;
+        double mouseTrig = Math.sqrt(Math.pow(mouseX, 2) + Math.pow(mouseY, 2));
+        double tankTrig = Math.sqrt(Math.pow(positionX, 2) + Math.pow(positionY, 2));
+        double x = positionX - mouseX;
+        double y = positionY - mouseY;
 
-        if (x == 0 && y == 0) {
-            turretRotation = 0;
-        } else  {
-
+        if (x < 0 && y < 0) {
+            turretRotation = Math.atan(mouseTrig / tankTrig);
+        } else if (x < 0 && y > 0) {
+            turretRotation = Math.atan(mouseTrig / tankTrig) + 90;
+        } else if (x > 0 && y > 0) {
+            turretRotation = Math.atan(mouseTrig / tankTrig) + 180;
+        } else if (x > 0 && y < 0) {
+            turretRotation = Math.atan(mouseTrig / tankTrig) + 270;
+        }
+        if (turretRotation > 360) {
+            turretRotation -= 360;
         }
 
 
