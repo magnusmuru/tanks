@@ -23,7 +23,7 @@ public class ServerMain extends Thread {
 
     protected List<SingleConnection> singleConnections;
 
-    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(3);
 
     public ServerMain(int port) throws IOException {
         instance = this;
@@ -68,17 +68,8 @@ public class ServerMain extends Thread {
 
         for (SingleConnection singleConnection : singleConnections) {
             singleConnection.sendUpdate();
-        }
-
-        for (SingleConnection singleConnection : singleConnections) {
             singleConnection.sendShots();
         }
-
-        for (Tank tankS : tankManager.getTankSet()) {
-            infoBuilder.append("|").append(tankS.getTankInfo());
-        }
-
-//        System.out.println("update " + infoBuilder.toString().replaceFirst("\\|", ""));
     }
 
     public static void main(String [] args) {

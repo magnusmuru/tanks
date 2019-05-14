@@ -85,13 +85,14 @@ public class Controls {
             EventHandler<KeyEvent> filter = new EventHandler<KeyEvent>() {
                 @Override
                 public void handle(KeyEvent event) {
-                    System.out.println(event.getText());
-                    tankControls.getUp().setValue(event.getText());
-                    event.consume();
+                    String key = event.getCode().toString();
+                    System.out.println(key);
+                    tankControls.getUp().setValue(key.toUpperCase());
                     forwards.removeEventFilter(KeyEvent.KEY_TYPED, this);
                 }
             };
 
+            tankControls.getUp().setValue("Press button");
             forwards.addEventFilter(KeyEvent.KEY_TYPED, filter);
         });
 

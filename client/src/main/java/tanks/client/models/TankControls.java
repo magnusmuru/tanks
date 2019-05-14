@@ -5,8 +5,7 @@ import javafx.beans.property.StringProperty;
 import lombok.Getter;
 
 public class TankControls {
-    @Getter
-    public StringProperty up = new SimpleStringProperty("UP");
+    @Getter public StringProperty up = new SimpleStringProperty("UP");
     //@Getter
     //@Setter
     //public String right = KeyEvent.getTypeString(KeyEvent.VK_RIGHT);

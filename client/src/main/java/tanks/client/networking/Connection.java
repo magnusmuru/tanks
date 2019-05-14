@@ -18,7 +18,7 @@ public class Connection extends Thread {
 
     private final String serverHandshakePattern = "^(?:server-handshake-id-)(\\d)$";
 
-    private final String hostName = "localhost";
+    private final String hostName = "192.168.51.194";
     private final int portNumber = 3000;
 
     boolean shouldContinue = true;

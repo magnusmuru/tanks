@@ -37,6 +37,8 @@ public class TankLocal extends TankBase {
         canShoot.bind(shotCooldownTicks.isEqualTo(0));
 
         getHullView().setOnKeyPressed(event -> {
+            //System.out.println(event.getCharacter());
+
             switch(event.getCode()) {
                 case UP: isUpPressed.setValue(true); break;
                 case DOWN: isDownPressed.setValue(true); break;

@@ -1,6 +1,7 @@
 package tanks.server.persistence;
 
 import lombok.Getter;
+import tanks.server.ServerMain;
 
 import java.util.ArrayList;
 
