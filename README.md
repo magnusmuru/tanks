@@ -1,31 +1,27 @@
 # Tanks
-Lihtne 2D ülaltvaates võrgus elav tankimäng. Eesmärk teise mängija tanki elud nulli viia.
+Simple top-down 2D game with the goal of killing other tanks.
 
-### Tegijad
+### Makers
 - Kaur Palang
 - Magnus Muru
 
-### Funktsionaalsus
-Peamine eesmärk õppida võrgundust. Mäng kasutab _dedicated server_ it, et pidada järge mängijate asukoha ja statistika üle ning edastada mängijate tegevusi teineteisele.
+### Functionality
+Main goal to learn networking. Game uses _dedicated server_ to calculate player location and statistics. A client is used to display said information to players.
 
-- Tank põõrab parema ja vasaku noolega
-- Tank liigub edasi ja tagasi ülemise ja alumise noolega
-- Torn jälgib hiire asukohta
-- Tulistada saab vasaku hiireklahviga
-- Mürsuga pihta saades elud vähenevad
+- Tank turns with arrow keys
+- Tank turret follows the cursor, fire with Left-Click
+- When shot, life is lost (not working as of now)
 
-### Tehniline info
-Kliendi aken JavaFX-iga. Dependency management Gradleis ja suhtlus serveriga Socketitega.
+### Technical info
+Client in JavaFX. Dependency management in Gradle.
 
-### Vaated
-##### Esileht
-- Nimekiri kohtvõrgus leitud serveritest ning nende kõrval nupp ühinemiseks ja number (_ühendatud_ **/** _kõik_)
-- Juhised
-- Seaded
-- Välju mängust
+### Views
+##### Title
+- List of servers (currently only one server, so no list)
+- Instructions
+- Settings
 
-##### Juhised
-Kena pilt nuppudest
-
-##### Seaded
-Võimalus muuta nuppe
+### Things learned
+- Sockets can be overloaded with info if they get something they are not supposed to pass along.
+- JavaFX is not meant for making games (better off using libGDX)
+- Networking needs to be built from the ground up to better handle all the functionality, not just as functionality gets added.
