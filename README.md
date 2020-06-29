@@ -1,5 +1,5 @@
 # Tanks
-Simple top-down 2D game with the goal of killing other tanks.
+Simple top-down 2D game with the goal of killing other tanks. Project uploaded to Github in case TalTech Gitlab goes down for use in the future.
 
 ### Makers
 - Kaur Palang
